@@ -1,0 +1,98 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+	align?: "left" | "center";
+	level?: "h1" | "h2" | "h3";
+	class?: string;
+}
+
+const {
+	title,
+	description,
+	align = "left",
+	level = "h2",
+	class: className = "",
+} = Astro.props;
+
+const classes = [
+	"section-heading",
+	`section-heading--${align}`,
+	className,
+]
+	.filter(Boolean)
+	.join(" ");
+---
+
+<div class={classes}>
+	{level === "h1" ? (
+		<h1>{title}</h1>
+	) : level === "h3" ? (
+		<h3>{title}</h3>
+	) : (
+		<h2>{title}</h2>
+	)}
+
+	{description && <p>{description}</p>}
+</div>
+
+<style>
+	.section-heading {
+		margin-bottom: 32px;
+	}
+
+	.section-heading h1,
+	.section-heading h2,
+	.section-heading h3 {
+		margin: 0;
+		color: #111111;
+		font-weight: 700;
+		letter-spacing: -0.03em;
+		line-height: 1.15;
+	}
+
+	.section-heading h1 {
+		font-size: clamp(32px, 5vw, 52px);
+	}
+
+	.section-heading h2 {
+		font-size: clamp(28px, 4vw, 40px);
+	}
+
+	.section-heading h3 {
+		font-size: clamp(22px, 3vw, 30px);
+	}
+
+	.section-heading p {
+		max-width: 680px;
+		margin: 12px 0 0;
+		color: #666666;
+		font-size: 16px;
+		line-height: 1.65;
+	}
+
+	.section-heading--center {
+		text-align: center;
+	}
+
+	.section-heading--center p {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	@media (max-width: 640px) {
+		.section-heading {
+			margin-bottom: 24px;
+		}
+
+		.section-heading p {
+			font-size: 15px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.section-heading {
+			scroll-behavior: auto;
+		}
+	}
+</style>

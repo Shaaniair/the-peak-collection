@@ -1,0 +1,153 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	category?: string;
+	date?: Date | string;
+	image?: string;
+	href: string;
+}
+
+const {
+	title,
+	description,
+	category,
+	date,
+	image,
+	href,
+} = Astro.props;
+
+const formattedDate = date
+	? new Date(date).toLocaleDateString("en-US", {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		})
+	: null;
+---
+
+<article class="guide-card">
+	{image && (
+		<a href={href} class="guide-card__image-link" aria-label={`Read ${title}`}>
+			<img
+				src={image}
+				alt={title}
+				class="guide-card__image"
+				loading="lazy"
+			/>
+		</a>
+	)}
+
+	<div class="guide-card__body">
+		<div class="guide-card__meta">
+			{category && <span>{category}</span>}
+			{formattedDate && <time datetime={new Date(date!).toISOString()}>{formattedDate}</time>}
+		</div>
+
+		<h3 class="guide-card__title">
+			<a href={href}>{title}</a>
+		</h3>
+
+		<p class="guide-card__description">{description}</p>
+
+		<a href={href} class="guide-card__link">
+			Read Guide <span aria-hidden="true">→</span>
+		</a>
+	</div>
+</article>
+
+<style>
+	.guide-card {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		overflow: hidden;
+		transition:
+			transform var(--transition-normal),
+			box-shadow var(--transition-normal),
+			border-color var(--transition-normal);
+	}
+
+	.guide-card:hover {
+		transform: translateY(-5px);
+		box-shadow: var(--shadow-md);
+		border-color: #d5d1c9;
+	}
+
+	.guide-card__image-link {
+		display: block;
+		overflow: hidden;
+		background: #f3f1ec;
+	}
+
+	.guide-card__image {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		transition: transform 280ms ease;
+	}
+
+	.guide-card:hover .guide-card__image {
+		transform: scale(1.03);
+	}
+
+	.guide-card__body {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		padding: 1.5rem;
+	}
+
+	.guide-card__meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-bottom: 0.75rem;
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.guide-card__title {
+		margin: 0;
+		font-size: 1.5rem;
+	}
+
+	.guide-card__title a {
+		text-decoration: none;
+	}
+
+	.guide-card__description {
+		margin: 0.75rem 0 1.25rem;
+		color: var(--color-muted);
+		line-height: 1.65;
+	}
+
+	.guide-card__link {
+		margin-top: auto;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.guide-card__link span {
+		display: inline-block;
+		transition: transform 180ms ease;
+	}
+
+	.guide-card__link:hover span {
+		transform: translateX(4px);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.guide-card,
+		.guide-card__image,
+		.guide-card__link span {
+			transition: none;
+		}
+	}
+</style>

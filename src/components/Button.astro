@@ -1,0 +1,149 @@
+---
+interface Props {
+	href?: string;
+	type?: "button" | "submit" | "reset";
+	variant?: "primary" | "secondary" | "text";
+	size?: "small" | "medium" | "large";
+	target?: "_blank" | "_self";
+	rel?: string;
+	ariaLabel?: string;
+	class?: string;
+}
+
+const {
+	href,
+	type = "button",
+	variant = "primary",
+	size = "medium",
+	target = "_self",
+	rel,
+	ariaLabel,
+	class: className = "",
+} = Astro.props;
+
+const classes = [
+	"tpc-button",
+	`tpc-button--${variant}`,
+	`tpc-button--${size}`,
+	className,
+]
+	.filter(Boolean)
+	.join(" ");
+
+const linkRel = target === "_blank" ? rel ?? "noopener noreferrer" : rel;
+---
+
+{
+	href ? (
+		<a
+			href={href}
+			class={classes}
+			target={target}
+			rel={linkRel}
+			aria-label={ariaLabel}
+		>
+			<slot />
+		</a>
+	) : (
+		<button type={type} class={classes} aria-label={ariaLabel}>
+			<slot />
+		</button>
+	)
+}
+
+<style>
+	.tpc-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		border: 1px solid transparent;
+		border-radius: 10px;
+		font: inherit;
+		font-weight: 600;
+		line-height: 1.2;
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			background-color 180ms ease,
+			color 180ms ease,
+			border-color 180ms ease,
+			transform 180ms ease,
+			box-shadow 180ms ease;
+	}
+
+	.tpc-button:hover {
+		transform: translateY(-1px);
+	}
+
+	.tpc-button:focus-visible {
+		outline: 3px solid rgba(17, 17, 17, 0.2);
+		outline-offset: 3px;
+	}
+
+	.tpc-button--small {
+		min-height: 36px;
+		padding: 8px 14px;
+		font-size: 13px;
+	}
+
+	.tpc-button--medium {
+		min-height: 44px;
+		padding: 11px 18px;
+		font-size: 14px;
+	}
+
+	.tpc-button--large {
+		min-height: 50px;
+		padding: 14px 22px;
+		font-size: 15px;
+	}
+
+	.tpc-button--primary {
+		background: #111111;
+		color: #ffffff;
+	}
+
+	.tpc-button--primary:hover {
+		background: #2a2a2a;
+	}
+
+	.tpc-button--secondary {
+		background: #ffffff;
+		color: #111111;
+		border-color: #d9d9d9;
+	}
+
+	.tpc-button--secondary:hover {
+		background: #f5f5f5;
+		border-color: #bdbdbd;
+	}
+
+	.tpc-button--text {
+		background: transparent;
+		color: #111111;
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+
+	.tpc-button--text:hover {
+		background: #f5f5f5;
+	}
+
+	.tpc-button:disabled {
+		opacity: 0.55;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.tpc-button {
+			transition: none;
+		}
+
+		.tpc-button:hover {
+			transform: none;
+		}
+	}
+</style>
+

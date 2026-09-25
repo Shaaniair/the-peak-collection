@@ -1,0 +1,153 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+	const products = await getCollection("products");
+
+	return products.map((product) => ({
+		params: { slug: product.id },
+		props: { product },
+	}));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+---
+
+<Layout
+	title={`${product.data.title} | The Peak Collection`}
+	description={product.data.description}
+>
+	<main class="product-page">
+		<div class="container">
+			<nav class="breadcrumbs">
+				<a href="/">Home</a>
+				<span>/</span>
+				<a href="/products">Products</a>
+				<span>/</span>
+				<span>{product.data.title}</span>
+			</nav>
+
+			<article>
+				<header class="product-header">
+					<p class="eyebrow">{product.data.category}</p>
+					<h1>{product.data.title}</h1>
+					<p class="description">{product.data.description}</p>
+				</header>
+
+				<div class="product-content">
+					{product.data.featuredImage && (
+						<img
+							src={product.data.featuredImage}
+							alt={product.data.title}
+							class="product-image"
+						/>
+					)}
+
+					<div class="content">
+						<Content />
+
+						{product.data.affiliate && product.data.affiliateUrl && (
+							<div class="affiliate-cta">
+								<a
+									href={product.data.affiliateUrl}
+									target="_blank"
+									rel="nofollow sponsored noopener"
+								>
+									Check Current Product Details
+								</a>
+							</div>
+						)}
+					</div>
+				</div>
+			</article>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.product-page {
+		padding: 3rem 1.25rem 5rem;
+	}
+
+	.container {
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	.breadcrumbs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.9rem;
+		color: #666;
+	}
+
+	.breadcrumbs a {
+		color: inherit;
+	}
+
+	.product-header {
+		max-width: 800px;
+		margin-bottom: 2.5rem;
+	}
+
+	.eyebrow {
+		font-size: 0.85rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	h1 {
+		font-size: clamp(2.2rem, 5vw, 4rem);
+		line-height: 1.05;
+		margin: 0.5rem 0 1rem;
+	}
+
+	.description {
+		font-size: 1.15rem;
+		line-height: 1.7;
+		color: #555;
+	}
+
+	.product-content {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 3rem;
+		align-items: start;
+	}
+
+	.product-image {
+		width: 100%;
+		height: auto;
+		border-radius: 16px;
+	}
+
+	.content {
+		font-size: 1.05rem;
+		line-height: 1.75;
+	}
+
+	.affiliate-cta {
+		margin-top: 2rem;
+	}
+
+	.affiliate-cta a {
+		display: inline-block;
+		padding: 0.9rem 1.4rem;
+		border-radius: 999px;
+		text-decoration: none;
+		font-weight: 700;
+		background: #111;
+		color: white;
+	}
+
+	@media (max-width: 768px) {
+		.product-content {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
