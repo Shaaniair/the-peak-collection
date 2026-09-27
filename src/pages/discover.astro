@@ -1,0 +1,233 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ProductCard from "../components/ProductCard.astro";
+import GuideCard from "../components/GuideCard.astro";
+import Button from "../components/Button.astro";
+
+const products = await getCollection("products");
+const guides = await getCollection("guides");
+
+const featuredProducts = products.slice(0, 3);
+const latestGuides = guides.slice(0, 3);
+---
+
+<Layout
+	title="Discover | The Peak Collection"
+	description="Discover useful products, thoughtful gifts, practical ideas and buying inspiration from The Peak Collection."
+>
+	<section class="discover-hero">
+		<div class="container hero-inner">
+			<span class="eyebrow">DISCOVER</span>
+
+			<h1>Find something worth having.</h1>
+
+			<p>
+				Explore useful products, thoughtful finds and practical ideas
+				curated by The Peak Collection.
+			</p>
+
+			<div class="hero-actions">
+				<Button href="/products" variant="primary" size="large">
+					Explore Products
+				</Button>
+
+				<Button href="/guides" variant="secondary" size="large">
+					Read Guides
+				</Button>
+			</div>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container">
+			<SectionHeading
+				eyebrow="PRODUCTS"
+				title="Featured Finds"
+				description="Explore products currently featured by The Peak Collection."
+			/>
+
+			<div class="product-grid">
+				{featuredProducts.map((product) => (
+					<ProductCard
+						title={product.data.title}
+						description={product.data.description}
+						category={product.data.category}
+						image={product.data.featuredImage}
+						href={`/products/${product.id}/`}
+					/>
+				))}
+			</div>
+
+			<div class="section-action">
+				<Button href="/products" variant="text">
+					View all products →
+				</Button>
+			</div>
+		</div>
+	</section>
+
+	<section class="section section-muted">
+		<div class="container">
+			<SectionHeading
+				eyebrow="GUIDES"
+				title="Useful Ideas"
+				description="Practical content to help you explore products and make more informed discoveries."
+			/>
+
+			<div class="guide-grid">
+				{latestGuides.map((guide) => (
+					<GuideCard
+						title={guide.data.title}
+						description={guide.data.description}
+						category={guide.data.category}
+						href={`/guides/${guide.id}/`}
+					/>
+				))}
+			</div>
+
+			<div class="section-action">
+				<Button href="/guides" variant="text">
+					Explore all guides →
+				</Button>
+			</div>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container final-cta">
+			<span class="eyebrow">THE PEAK COLLECTION</span>
+
+			<h2>Discover your next worthwhile find.</h2>
+
+			<p>
+				Keep exploring products, guides and ideas selected to make
+				discovery simpler.
+			</p>
+
+			<Button href="/products" variant="primary" size="large">
+				Start Exploring
+			</Button>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.discover-hero {
+		padding: 7rem 1.25rem 6rem;
+		background:
+			radial-gradient(circle at top right, rgba(17, 17, 17, 0.08), transparent 35%),
+			#f7f7f5;
+	}
+
+	.container {
+		width: min(1100px, 100%);
+		margin: 0 auto;
+	}
+
+	.hero-inner {
+		max-width: 780px;
+		text-align: center;
+		margin: 0 auto;
+	}
+
+	.eyebrow {
+		display: inline-block;
+		margin-bottom: 1rem;
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #666;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(2.6rem, 7vw, 5.5rem);
+		line-height: 0.98;
+		letter-spacing: -0.045em;
+	}
+
+	.hero-inner p {
+		max-width: 620px;
+		margin: 1.5rem auto 0;
+		font-size: clamp(1rem, 2vw, 1.2rem);
+		color: #555;
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.8rem;
+		margin-top: 2rem;
+	}
+
+	.section {
+		padding: 6rem 1.25rem;
+	}
+
+	.section-muted {
+		background: #f7f7f5;
+	}
+
+	.product-grid,
+	.guide-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.5rem;
+		margin-top: 2.5rem;
+	}
+
+	.section-action {
+		display: flex;
+		justify-content: center;
+		margin-top: 2.25rem;
+	}
+
+	.final-cta {
+		max-width: 720px;
+		text-align: center;
+	}
+
+	.final-cta h2 {
+		margin: 0;
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		line-height: 1.05;
+		letter-spacing: -0.035em;
+	}
+
+	.final-cta p {
+		max-width: 580px;
+		margin: 1.25rem auto 2rem;
+		color: #555;
+	}
+
+	@media (max-width: 900px) {
+		.product-grid,
+		.guide-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.discover-hero {
+			padding: 5rem 1rem 4rem;
+		}
+
+		.section {
+			padding: 4rem 1rem;
+		}
+
+		.product-grid,
+		.guide-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.hero-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+</style>

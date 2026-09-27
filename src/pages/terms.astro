@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+---
+
+<Layout
+	title="Terms | The Peak Collection"
+	description="Read the terms governing use of The Peak Collection."
+>
+	<section class="legal-page">
+		<div class="container">
+			<Breadcrumbs
+				items={[
+					{ label: "Home", href: "/" },
+					{ label: "Terms" },
+				]}
+			/>
+
+			<header class="legal-header">
+				<p class="eyebrow">Website Terms</p>
+				<h1>Terms</h1>
+				<p>
+					General terms for using The Peak Collection.
+				</p>
+			</header>
+
+			<article class="legal-content">
+				<h2>Use of This Website</h2>
+				<p>
+					The Peak Collection provides product discovery, guides,
+					information and related editorial content for general
+					informational purposes.
+				</p>
+
+				<h2>Product Information</h2>
+				<p>
+					Product information, prices, specifications, availability and
+					other details may change. Visitors should verify current
+					information with the relevant retailer or manufacturer before
+					making a purchase.
+				</p>
+
+				<h2>External Links</h2>
+				<p>
+					This website may contain links to third-party websites. Those
+					websites operate independently and are subject to their own
+					terms and policies.
+				</p>
+
+				<h2>Content</h2>
+				<p>
+					The Peak Collection content is provided for general information
+					and discovery purposes. Nothing on this website should be
+					interpreted as a guarantee of product performance, availability
+					or suitability for a particular purpose.
+				</p>
+			</article>
+		</div>
+	</section>
+</Layout>
+ 
+<style>
+	.legal-page {
+		padding: 3rem 1.25rem 6rem;
+	}
+
+	.container {
+		width: min(900px, 100%);
+		margin: 0 auto;
+	}
+
+	.legal-header {
+		max-width: 760px;
+		margin: 4rem 0;
+	}
+
+	.eyebrow {
+		margin: 0 0 0.75rem;
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(2.5rem, 6vw, 4.5rem);
+		line-height: 1;
+	}
+
+	.legal-header > p {
+		margin-top: 1.25rem;
+		color: var(--color-muted);
+		font-size: 1.1rem;
+	}
+
+	.legal-content {
+		border-top: 1px solid var(--color-border);
+		padding-top: 3rem;
+	}
+
+	.legal-content h2 {
+		margin: 2.5rem 0 0.75rem;
+		font-size: 1.5rem;
+	}
+
+	.legal-content h2:first-child {
+		margin-top: 0;
+	}
+
+	.legal-content p {
+		margin: 0;
+		color: var(--color-muted);
+		line-height: 1.8;
+	}
+
+	@media (max-width: 640px) {
+		.legal-page {
+			padding: 2rem 1rem 4rem;
+		}
+
+		.legal-header {
+			margin: 3rem 0;
+		}
+	}
+</style>

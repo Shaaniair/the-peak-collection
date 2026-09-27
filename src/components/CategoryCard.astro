@@ -28,7 +28,9 @@ const {
 			</p>
 		)}
 
-		<span class="category-card__arrow" aria-hidden="true">→</span>
+		<span class="category-card__link">
+	Explore {title} <span aria-hidden="true">→</span>
+</span>
 	</div>
 </a>
 
@@ -103,23 +105,30 @@ const {
 		color: var(--color-text);
 	}
 
-	.category-card__arrow {
-		display: inline-block;
-		margin-top: 1.25rem;
-		font-size: 1.35rem;
-		font-weight: 700;
-		transition: transform 180ms ease;
-	}
+	.category-card__link {
+	display: inline-block;
+	margin-top: 1.25rem;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--color-text);
+	text-decoration: none;
+}
 
-	.category-card:hover .category-card__arrow {
-		transform: translateX(5px);
-	}
+.category-card__link span {
+	display: inline-block;
+	margin-left: 0.15rem;
+	transition: transform 180ms ease;
+}
+
+.category-card:hover .category-card__link span {
+	transform: translateX(5px);
+}
 
 	@media (prefers-reduced-motion: reduce) {
-		.category-card,
-		.category-card::after,
-		.category-card__arrow {
-			transition: none;
-		}
+	.category-card,
+	.category-card::after,
+	.category-card__link span {
+		transition: none;
 	}
+}
 </style>

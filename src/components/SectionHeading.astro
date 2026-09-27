@@ -1,5 +1,6 @@
 ---
 interface Props {
+	eyebrow?: string;
 	title: string;
 	description?: string;
 	align?: "left" | "center";
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const {
+	eyebrow,
 	title,
 	description,
 	align = "left",
@@ -25,6 +27,8 @@ const classes = [
 ---
 
 <div class={classes}>
+	{eyebrow && <p class="section-heading__eyebrow">{eyebrow}</p>}
+
 	{level === "h1" ? (
 		<h1>{title}</h1>
 	) : level === "h3" ? (
@@ -40,7 +44,15 @@ const classes = [
 	.section-heading {
 		margin-bottom: 32px;
 	}
-
+	
+.section-heading__eyebrow {
+	margin: 0 0 0.75rem;
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--color-muted);
+}
 	.section-heading h1,
 	.section-heading h2,
 	.section-heading h3 {

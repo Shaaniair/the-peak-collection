@@ -1,11 +1,313 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ProductCard from "../components/ProductCard.astro";
+import Button from "../components/Button.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const products = await getCollection("products");
+
+const featuredProduct = products.find(
+	(product) => product.id === "cozyberry-candle-warmer"
+);
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+	title="The Peak Collection | Discover Something Worth Having"
+	description="Discover useful products, thoughtful gifts, home finds and practical buying ideas from The Peak Collection."
+>
+	<div class="home">
+		<section class="hero">
+			<div class="container hero__inner">
+				<div class="hero__content">
+					<p class="eyebrow">THE PEAK COLLECTION</p>
+
+					<h1>Discover Something Worth Having.</h1>
+
+					<p class="hero__description">
+						Explore useful products, thoughtful gifts, home finds and
+						practical ideas worth discovering.
+					</p>
+
+					<div class="hero__actions">
+	<Button href="/products/" variant="primary" size="large">
+		Explore Products
+	</Button>
+
+	<Button href="/guides/" variant="secondary" size="large">
+		Read Our Guides
+	</Button>
+</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container">
+				<SectionHeading
+					eyebrow="Featured Discovery"
+					title="A Product Worth Exploring"
+					description="Explore one of our latest discoveries and see why it caught our attention."
+				/>
+
+				{featuredProduct && (
+	<div class="featured-product">
+		<ProductCard
+			title={featuredProduct.data.title}
+			description={featuredProduct.data.description}
+			category={featuredProduct.data.category}
+			image={featuredProduct.data.featuredImage}
+			href={`/products/${featuredProduct.id}/`}
+			featured={true}
+		/>
+	</div>
+)}
+			</div>
+		</section>
+
+		<section class="section section--muted">
+			<div class="container">
+				<SectionHeading
+					eyebrow="Explore"
+					title="Find Your Next Discovery"
+					description="Browse products and ideas across the growing collections at The Peak Collection."
+				/>
+
+				<div class="explore-grid">
+					<a href="/products/" class="explore-card">
+						<span class="explore-card__number">01</span>
+						<h2>Products</h2>
+						<p>
+							Explore useful products, thoughtful gifts and interesting
+							finds.
+						</p>
+						<span class="explore-card__link">Explore Products →</span>
+					</a>
+
+					<a href="/guides/" class="explore-card">
+						<span class="explore-card__number">02</span>
+						<h2>Guides</h2>
+						<p>
+							Discover practical buying ideas, explanations and helpful
+							information.
+						</p>
+						<span class="explore-card__link">Read Guides →</span>
+					</a>
+
+					<a href="/categories/" class="explore-card">
+						<span class="explore-card__number">03</span>
+						<h2>Categories</h2>
+						<p>
+							Browse discoveries organized around the things you care
+							about.
+						</p>
+						<span class="explore-card__link">Browse Categories →</span>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container about-preview">
+				<div>
+					<p class="eyebrow">ABOUT THE PEAK COLLECTION</p>
+					<h2>Discovery made simpler.</h2>
+				</div>
+
+				<div>
+					<p>
+						The Peak Collection is built around discovering useful
+						products, thoughtful gifts and practical ideas — then making
+						the discovery process simpler for you.
+					</p>
+
+					<a href="/about/" class="text-link">Learn more about us →</a>
+				</div>
+			</div>
+		</section>
+	</div>
 </Layout>
+
+<style>
+	.home {
+		overflow: hidden;
+	}
+
+	.container {
+		width: min(1100px, calc(100% - 2.5rem));
+		margin: 0 auto;
+	}
+
+	.hero {
+		padding: 7rem 0 6rem;
+		background:
+			radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.06), transparent 35%),
+			linear-gradient(180deg, #f8f7f3 0%, #ffffff 100%);
+	}
+
+	.hero__content {
+		max-width: 800px;
+	}
+
+	.eyebrow {
+		margin: 0 0 1rem;
+		font-size: 0.78rem;
+		font-weight: 800;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #666;
+	}
+
+	h1 {
+		max-width: 800px;
+		margin: 0;
+		font-size: clamp(3rem, 8vw, 6.5rem);
+		line-height: 0.95;
+		letter-spacing: -0.055em;
+	}
+
+	.hero__description {
+		max-width: 650px;
+		margin: 2rem 0 0;
+		font-size: clamp(1.1rem, 2vw, 1.35rem);
+		line-height: 1.7;
+		color: #555;
+	}
+
+	.hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.9rem;
+		margin-top: 2.25rem;
+	}
+
+	.section {
+		padding: 6rem 0;
+	}
+
+	.section--muted {
+		background: #f7f6f2;
+	}
+
+	.featured-product {
+		max-width: 500px;
+		margin-top: 2.5rem;
+	}
+
+	.explore-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+		margin-top: 2.5rem;
+	}
+
+	.explore-card {
+		display: flex;
+		flex-direction: column;
+		min-height: 270px;
+		padding: 2rem;
+		border: 1px solid #ddd;
+		border-radius: 18px;
+		background: #fff;
+		color: inherit;
+		text-decoration: none;
+		transition:
+			transform 180ms ease,
+			box-shadow 180ms ease;
+	}
+
+	.explore-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+	}
+
+	.explore-card__number {
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.1em;
+		color: #777;
+	}
+
+	.explore-card h2 {
+		margin: 2rem 0 0.75rem;
+		font-size: 1.7rem;
+	}
+
+	.explore-card p {
+		margin: 0;
+		line-height: 1.65;
+		color: #666;
+	}
+
+	.explore-card__link {
+		margin-top: auto;
+		padding-top: 1.5rem;
+		font-weight: 700;
+	}
+
+	.about-preview {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: start;
+	}
+
+	.about-preview h2 {
+		margin: 0;
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		line-height: 1.05;
+		letter-spacing: -0.04em;
+	}
+
+	.about-preview p {
+		margin-top: 0;
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: #555;
+	}
+
+	.text-link {
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	@media (max-width: 800px) {
+		.hero {
+			padding: 5rem 0 4rem;
+		}
+
+		.section {
+			padding: 4rem 0;
+		}
+
+		.explore-grid,
+		.about-preview {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.container {
+			width: min(100% - 2rem, 1100px);
+		}
+
+		h1 {
+			font-size: clamp(2.7rem, 15vw, 4.5rem);
+		}
+
+		.hero__actions {
+			flex-direction: column;
+		}
+
+		.button {
+			width: 100%;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.button,
+		.explore-card {
+			transition: none;
+		}
+	}
+</style>

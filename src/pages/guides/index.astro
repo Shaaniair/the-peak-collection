@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import GuideCard from "../../components/GuideCard.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+
+const guides = await getCollection("guides");
+---
+
+<Layout
+	title="Guides | The Peak Collection"
+	description="Practical guides, ideas and useful insights from The Peak Collection."
+>
+	<section class="guides-page">
+		<div class="container">
+			<SectionHeading
+				title="Guides"
+				description="Practical guides, useful ideas and insights to help you discover more."
+			/>
+
+			<div class="guide-grid">
+				{guides.map((guide) => (
+					<GuideCard
+						title={guide.data.title}
+						description={guide.data.description}
+						category={guide.data.category}
+						image={guide.data.featuredImage}
+						href={`/guides/${guide.id}/`}
+					/>
+				))}
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.guides-page {
+		padding: 4rem 1.25rem 5rem;
+	}
+
+	.container {
+		width: min(1100px, 100%);
+		margin: 0 auto;
+	}
+
+	.guide-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.5rem;
+	}
+
+	@media (max-width: 900px) {
+		.guide-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.guides-page {
+			padding: 3rem 1rem 4rem;
+		}
+
+		.guide-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

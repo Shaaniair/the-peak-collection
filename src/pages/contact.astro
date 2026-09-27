@@ -1,0 +1,272 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Button from "../components/Button.astro";
+---
+
+<Layout
+	title="Contact | The Peak Collection"
+	description="Get in touch with The Peak Collection for questions, feedback, collaborations, product suggestions and general inquiries."
+>
+	<main>
+		<section class="contact-hero">
+			<div class="container">
+				<SectionHeading
+					eyebrow="GET IN TOUCH"
+					title="Let's connect."
+					description="Have a question, suggestion, collaboration idea or simply want to share a product worth discovering? We'd love to hear from you."
+				/>
+			</div>
+		</section>
+
+		<section class="contact-content" aria-labelledby="contact-options-title">
+			<div class="container contact-grid">
+				<div class="contact-card contact-card--primary">
+					<span class="contact-icon" aria-hidden="true">✉</span>
+
+					<div>
+						<p class="card-eyebrow">EMAIL</p>
+						<h2 id="contact-options-title">Send us a message</h2>
+						<p>
+							For general inquiries, feedback, product suggestions,
+							collaboration opportunities or other questions, email us directly.
+						</p>
+
+						<a
+							class="email-link"
+							href="mailto:zahidzeeshan94@gmail.com"
+							aria-label="Email The Peak Collection"
+						>
+							zahidzeeshan94@gmail.com
+						</a>
+
+						<div class="card-action">
+							<Button
+								href="mailto:zahidzeeshan94@gmail.com"
+								variant="primary"
+								size="medium"
+							>
+								Email The Peak Collection
+							</Button>
+						</div>
+					</div>
+				</div>
+
+				<div class="contact-card">
+					<span class="contact-icon" aria-hidden="true">✦</span>
+
+					<div>
+						<p class="card-eyebrow">WHAT WE WELCOME</p>
+						<h2>Ideas, feedback &amp; discoveries</h2>
+						<p>
+							The Peak Collection is built around discovering useful,
+							interesting and worthwhile products and ideas.
+						</p>
+
+						<ul class="contact-list">
+							<li>Product suggestions</li>
+							<li>Content feedback</li>
+							<li>Collaboration inquiries</li>
+							<li>Website feedback</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="contact-bottom">
+			<div class="container">
+				<div class="contact-note">
+					<p class="note-label">A QUICK NOTE</p>
+					<h2>Have something worth sharing?</h2>
+					<p>
+						Whether it's a useful product, a thoughtful recommendation or
+						an idea for working together, feel free to reach out.
+					</p>
+
+					<Button
+						href="mailto:zahidzeeshan94@gmail.com"
+						variant="secondary"
+						size="medium"
+					>
+						Start a Conversation
+					</Button>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.contact-hero {
+		padding: 5rem 1.25rem 3rem;
+	}
+
+	.container {
+		width: min(1100px, 100%);
+		margin: 0 auto;
+	}
+
+	.contact-content {
+		padding: 1rem 1.25rem 5rem;
+	}
+
+	.contact-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.5rem;
+	}
+
+	.contact-card {
+		display: flex;
+		gap: 1.25rem;
+		padding: 2rem;
+		border: 1px solid #e7e7e7;
+		border-radius: 18px;
+		background: #ffffff;
+		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
+	}
+
+	.contact-card--primary {
+		border-color: #dcdcdc;
+	}
+
+	.contact-icon {
+		display: inline-flex;
+		flex: 0 0 44px;
+		width: 44px;
+		height: 44px;
+		align-items: center;
+		justify-content: center;
+		border-radius: 12px;
+		background: #111111;
+		color: #ffffff;
+		font-size: 20px;
+		line-height: 1;
+	}
+
+	.card-eyebrow,
+	.note-label {
+		margin: 0 0 0.55rem;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		color: #666666;
+	}
+
+	.contact-card h2 {
+		margin: 0;
+		font-size: clamp(1.35rem, 2vw, 1.75rem);
+		line-height: 1.2;
+		color: #111111;
+	}
+
+	.contact-card p:not(.card-eyebrow) {
+		margin: 0.85rem 0 0;
+		max-width: 48ch;
+		color: #5f5f5f;
+		line-height: 1.7;
+	}
+
+	.email-link {
+		display: inline-block;
+		margin-top: 1rem;
+		color: #111111;
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		overflow-wrap: anywhere;
+	}
+
+	.email-link:hover {
+		opacity: 0.7;
+	}
+
+	.card-action {
+		margin-top: 1.35rem;
+	}
+
+	.contact-list {
+		display: grid;
+		gap: 0.65rem;
+		margin: 1.25rem 0 0;
+		padding: 0;
+		list-style: none;
+		color: #444444;
+	}
+
+	.contact-list li {
+		position: relative;
+		padding-left: 1.2rem;
+		line-height: 1.5;
+	}
+
+	.contact-list li::before {
+		content: "•";
+		position: absolute;
+		left: 0;
+		font-weight: 700;
+		color: #111111;
+	}
+
+	.contact-bottom {
+		padding: 0 1.25rem 5rem;
+	}
+
+	.contact-note {
+		padding: 3rem 2rem;
+		border-radius: 20px;
+		background: #f5f5f5;
+		text-align: center;
+	}
+
+	.contact-note h2 {
+		margin: 0;
+		font-size: clamp(1.6rem, 3vw, 2.25rem);
+		line-height: 1.15;
+		color: #111111;
+	}
+
+	.contact-note > p:not(.note-label) {
+		max-width: 58ch;
+		margin: 1rem auto 1.5rem;
+		color: #5f5f5f;
+		line-height: 1.7;
+	}
+
+	@media (max-width: 720px) {
+		.contact-hero {
+			padding-top: 3.5rem;
+		}
+
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.contact-card {
+			padding: 1.5rem;
+		}
+
+		.contact-note {
+			padding: 2.25rem 1.25rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.contact-card {
+			flex-direction: column;
+		}
+
+		.contact-icon {
+			flex-basis: 42px;
+			width: 42px;
+			height: 42px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.email-link {
+			transition: none;
+		}
+	}
+</style>

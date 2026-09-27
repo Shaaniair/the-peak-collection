@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import CategoryCard from "../../components/CategoryCard.astro";
+
+const categories = await getCollection("categories");
+---
+
+<Layout
+	title="Categories | The Peak Collection"
+	description="Explore product categories and discover useful finds from The Peak Collection."
+>
+	<section class="categories-page">
+		<div class="container">
+			<SectionHeading
+				eyebrow="Browse by Category"
+				title="Categories"
+				description="Explore our collections by category and discover products and ideas that match your interests."
+			/>
+
+			<div class="category-grid">
+				{categories.map((category) => (
+					<CategoryCard
+						title={category.data.title}
+						description={category.data.description}
+						href={`/categories/${category.id}/`}
+					/>
+				))}
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.categories-page {
+		padding: 4rem 1.25rem 5rem;
+	}
+
+	.container {
+		width: min(1100px, 100%);
+		margin: 0 auto;
+	}
+
+	.category-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.5rem;
+		margin-top: 2.5rem;
+	}
+
+	@media (max-width: 900px) {
+		.category-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.categories-page {
+			padding: 3rem 1rem 4rem;
+		}
+
+		.category-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

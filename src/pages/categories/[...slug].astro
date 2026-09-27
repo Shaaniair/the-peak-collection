@@ -1,0 +1,190 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Button from "../../components/Button.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+
+export async function getStaticPaths() {
+	const categories = await getCollection("categories");
+
+	return categories.map((category) => ({
+		params: {
+			slug: category.id,
+		},
+		props: {
+			category,
+		},
+	}));
+}
+
+const { category } = Astro.props;
+
+const products = await getCollection("products");
+
+const categoryProducts = products.filter(
+	(product) => product.data.category === category.data.title
+);
+---
+
+<Layout
+	title={`${category.data.title} | The Peak Collection`}
+	description={category.data.description}
+>
+	<main class="category-detail">
+		<div class="container">
+			<Breadcrumbs
+				items={[
+					{ label: "Home", href: "/" },
+					{ label: "Categories", href: "/categories/" },
+					{ label: category.data.title },
+				]}
+			/>
+
+			<header class="category-header">
+				<p class="eyebrow">Category</p>
+
+				<h1>{category.data.title}</h1>
+
+				<p class="description">
+					{category.data.description}
+				</p>
+			</header>
+
+			<div class="category-actions">
+				<Button href="/products/" variant="primary">
+					Explore Products →
+				</Button>
+
+				<Button href="/categories/" variant="secondary">
+					← All Categories
+				</Button>
+			</div>
+            <section class="category-products">
+	<SectionHeading
+		eyebrow="Products in this Category"
+		title={`Explore ${category.data.title}`}
+		description={`Discover products currently listed in the ${category.data.title} category.`}
+	/>
+
+	{categoryProducts.length > 0 ? (
+		<div class="product-grid">
+			{categoryProducts.map((product) => (
+				<ProductCard
+					title={product.data.title}
+					description={product.data.description}
+					category={product.data.category}
+					image={product.data.featuredImage}
+					href={`/products/${product.id}/`}
+				/>
+			))}
+		</div>
+	) : (
+		<p class="empty-state">
+			There are no products in this category yet.
+		</p>
+	)}
+</section>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.category-detail {
+		padding: 3rem 1.25rem 6rem;
+	}
+
+	.container {
+		width: min(1000px, 100%);
+		margin: 0 auto;
+	}
+
+	.category-header {
+		max-width: 760px;
+		margin: 4rem auto 2.5rem;
+		text-align: center;
+	}
+
+	.eyebrow {
+		margin: 0 0 0.75rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(2.4rem, 6vw, 4rem);
+		line-height: 1.05;
+	}
+
+	.description {
+		margin: 1.25rem auto 0;
+		max-width: 680px;
+		font-size: 1.15rem;
+		line-height: 1.7;
+		color: #555;
+	}
+
+	.category-actions {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.category-products {
+	margin-top: 5rem;
+	padding-top: 4rem;
+	border-top: 1px solid #e1dfd9;
+}
+
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1.5rem;
+}
+
+.empty-state {
+	margin: 0;
+	padding: 2rem;
+	border: 1px dashed #d5d2ca;
+	border-radius: 14px;
+	color: #666;
+	text-align: center;
+}
+
+@media (max-width: 900px) {
+	.product-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	.category-products {
+		margin-top: 4rem;
+		padding-top: 3rem;
+	}
+
+	.product-grid {
+		grid-template-columns: 1fr;
+	}
+}
+    @media (max-width: 640px) {
+		.category-detail {
+			padding: 2rem 1rem 4rem;
+		}
+
+		.category-header {
+			margin-top: 3rem;
+		}
+
+		.category-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+</style>
