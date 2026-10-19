@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Button from "../../components/Button.astro";
@@ -56,13 +57,24 @@ const { Content } = await render(guide);
 					)}
 				</header>
 
+				{guide.data.featuredImage && (
+					<div class="guide-featured-image">
+						<Image
+							src={guide.data.featuredImage}
+							alt={guide.data.title}
+							width={1200}
+							loading="eager"
+						/>
+					</div>
+				)}
+
 				<div class="guide-content">
 					<Content />
 				</div>
 
 				<div class="guide-footer">
 					<Button href="/guides/" variant="secondary">
-						← Back to Guides
+						Back to Guides
 					</Button>
 				</div>
 			</article>
@@ -87,22 +99,27 @@ const { Content } = await render(guide);
 
 	.eyebrow {
 		margin: 0 0 0.75rem;
+
 		font-size: 0.85rem;
 		font-weight: 700;
+
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 	}
 
 	h1 {
 		margin: 0;
+
 		font-size: clamp(2.2rem, 6vw, 4rem);
 		line-height: 1.05;
 	}
 
 	.description {
 		margin: 1.25rem 0 1rem;
+
 		font-size: 1.15rem;
 		line-height: 1.7;
+
 		color: #555;
 	}
 
@@ -111,9 +128,23 @@ const { Content } = await render(guide);
 		color: #777;
 	}
 
+	.guide-featured-image {
+		max-width: 860px;
+		margin: 0 auto 4rem;
+		overflow: hidden;
+		border-radius: 20px;
+	}
+
+	.guide-featured-image img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
 	.guide-content {
 		max-width: 760px;
 		margin: 0 auto;
+
 		font-size: 1.05rem;
 		line-height: 1.8;
 	}
@@ -153,6 +184,11 @@ const { Content } = await render(guide);
 
 		.guide-header {
 			margin-top: 2rem;
+		}
+
+		.guide-featured-image {
+			margin-bottom: 3rem;
+			border-radius: 14px;
 		}
 	}
 </style>

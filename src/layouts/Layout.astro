@@ -2,6 +2,9 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import BackToTop from "../components/BackToTop.astro";
+
 interface Props {
 	title?: string;
 	description?: string;
@@ -13,10 +16,25 @@ const {
 } = Astro.props;
 
 const canonicalURL = Astro.url;
+const siteName = "The Peak Collection";
+const defaultTitle = "The Peak Collection | Discover Something Worth Having";
+const defaultDescription =
+	"The Peak Collection helps you discover useful products, thoughtful gifts, home finds and practical buying ideas.";
 ---
 <!doctype html>
 <html lang="en">
 	<head>
+		<script is:inline>
+	const savedTheme = localStorage.getItem("theme");
+
+	const theme =
+		savedTheme ||
+		(window.matchMedia("(prefers-color-scheme: dark)").matches
+			? "dark"
+			: "light");
+
+	document.documentElement.classList.toggle("dark", theme === "dark");
+</script>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -53,6 +71,7 @@ const canonicalURL = Astro.url;
 		</main>
 
 		<Footer />
+<BackToTop />
 	</body>
 </html>
 

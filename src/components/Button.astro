@@ -1,149 +1,434 @@
 ---
 interface Props {
-	href?: string;
-	type?: "button" | "submit" | "reset";
+	href: string;
 	variant?: "primary" | "secondary" | "text";
 	size?: "small" | "medium" | "large";
-	target?: "_blank" | "_self";
-	rel?: string;
-	ariaLabel?: string;
 	class?: string;
+	target?: string;
+	rel?: string;
 }
 
 const {
 	href,
-	type = "button",
 	variant = "primary",
 	size = "medium",
-	target = "_self",
-	rel,
-	ariaLabel,
 	class: className = "",
+	target,
+	rel,
 } = Astro.props;
 
 const classes = [
-	"tpc-button",
-	`tpc-button--${variant}`,
-	`tpc-button--${size}`,
+	"button",
+	`button--${variant}`,
+	`button--${size}`,
 	className,
 ]
 	.filter(Boolean)
 	.join(" ");
-
-const linkRel = target === "_blank" ? rel ?? "noopener noreferrer" : rel;
 ---
 
-{
-	href ? (
-		<a
-			href={href}
-			class={classes}
-			target={target}
-			rel={linkRel}
-			aria-label={ariaLabel}
-		>
-			<slot />
-		</a>
-	) : (
-		<button type={type} class={classes} aria-label={ariaLabel}>
-			<slot />
-		</button>
-	)
-}
+<a
+	href={href}
+	class={classes}
+	target={target}
+	rel={rel}
+>
+	<span class="button__label">
+		<slot />
+	</span>
+
+	{variant !== "text" && (
+		<span class="button__arrow" aria-hidden="true">
+			<span class="button__arrow-default">→</span>
+			<span class="button__arrow-hover">↗</span>
+		</span>
+	)}
+</a>
 
 <style>
-	.tpc-button {
+	/* =========================================================
+	   TPC BUTTON SYSTEM
+	   The Peak Collection — Premium Interactive UI
+	   ========================================================= */
+
+	.button {
+		position: relative;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
+		gap: 0.65rem;
+
 		border: 1px solid transparent;
-		border-radius: 10px;
-		font: inherit;
-		font-weight: 600;
-		line-height: 1.2;
+		border-radius: 999px;
+
 		text-decoration: none;
+		font-weight: 750;
+		line-height: 1;
+		letter-spacing: -0.01em;
+
 		cursor: pointer;
+		isolation: isolate;
+		overflow: hidden;
+
 		transition:
+			transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
 			background-color 180ms ease,
 			color 180ms ease,
 			border-color 180ms ease,
-			transform 180ms ease,
-			box-shadow 180ms ease;
+			box-shadow 220ms ease;
 	}
 
-	.tpc-button:hover {
-		transform: translateY(-1px);
+	/* ---------------------------------------------------------
+	   SHINE EFFECT
+	   --------------------------------------------------------- */
+
+	.button::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: -80%;
+
+		width: 55%;
+
+		background:
+	linear-gradient(
+		135deg,
+		#0891b2,
+		#06b6d4
+	);
+
+color: #e9dbdb;
+
+box-shadow:
+	0 8px 22px rgba(49, 184, 218, 0.22);
+
+		transform: skewX(-18deg);
+		transition:
+			left 600ms cubic-bezier(0.22, 1, 0.36, 1);
+
+		pointer-events: none;
+		z-index: 2;
 	}
 
-	.tpc-button:focus-visible {
-		outline: 3px solid rgba(17, 17, 17, 0.2);
-		outline-offset: 3px;
+	.button:hover::before {
+		left: 125%;
 	}
 
-	.tpc-button--small {
-		min-height: 36px;
-		padding: 8px 14px;
-		font-size: 13px;
+	/* ---------------------------------------------------------
+	   BUTTON CONTENT
+	   --------------------------------------------------------- */
+
+	.button__label {
+		position: relative;
+		z-index: 3;
 	}
 
-	.tpc-button--medium {
-		min-height: 44px;
-		padding: 11px 18px;
-		font-size: 14px;
+	.button__arrow {
+		position: relative;
+
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 1rem;
+		height: 1rem;
+
+		font-size: 1rem;
+		line-height: 1;
+
+		z-index: 3;
 	}
 
-	.tpc-button--large {
-		min-height: 50px;
-		padding: 14px 22px;
-		font-size: 15px;
+	.button__arrow-default,
+	.button__arrow-hover {
+		position: absolute;
+		inset: 0;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		transition:
+			opacity 180ms ease,
+			transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.tpc-button--primary {
-		background: #111111;
-		color: #ffffff;
+	.button__arrow-default {
+		opacity: 1;
+		transform: translate(0, 0);
 	}
 
-	.tpc-button--primary:hover {
-		background: #2a2a2a;
+	.button__arrow-hover {
+		opacity: 0;
+		transform: translate(-5px, 5px);
 	}
 
-	.tpc-button--secondary {
+	.button:hover .button__arrow-default {
+		opacity: 0;
+		transform: translate(5px, -5px);
+	}
+
+	.button:hover .button__arrow-hover {
+		opacity: 1;
+		transform: translate(0, 0);
+	}
+
+	/* ---------------------------------------------------------
+	   SIZES
+	   --------------------------------------------------------- */
+
+	.button--small {
+		min-height: 38px;
+		padding: 0.68rem 0.95rem;
+		font-size: 0.82rem;
+	}
+
+	.button--medium {
+		min-height: 46px;
+		padding: 0.82rem 1.2rem;
+		font-size: 0.9rem;
+	}
+
+	.button--large {
+		min-height: 54px;
+		padding: 0.95rem 1.4rem;
+		font-size: 0.96rem;
+	}
+
+	/* ---------------------------------------------------------
+	   PRIMARY — LIGHT MODE
+	   --------------------------------------------------------- */
+
+	.button--primary {
+		background:
+			linear-gradient(
+				135deg,
+				#111111 0%,
+				#25202f 55%,
+				#111111 100%
+			);
+
+		/* Explicit specificity prevents global <a> color override */
+		color: #ffffff !important;
+
+		border-color: rgba(255, 255, 255, 0.08);
+
+		box-shadow:
+	0 12px 30px rgba(8, 145, 178, 0.32);
+			0 2px 6px rgba(0, 0, 0, 0.08);
+	}
+
+	.button--primary:hover {
+		transform: translateY(-3px);
+
+		border-color: rgba(167, 139, 250, 0.55);
+
+		box-shadow:
+			0 16px 38px rgba(0, 0, 0, 0.18),
+			0 0 30px rgba(124, 58, 237, 0.22);
+	}
+
+	.button--primary:active {
+		transform: translateY(-1px) scale(0.97);
+
+		box-shadow:
+			0 7px 18px rgba(0, 0, 0, 0.16),
+			0 0 18px rgba(124, 58, 237, 0.16);
+	}
+
+	/* ---------------------------------------------------------
+	   SECONDARY — LIGHT MODE
+	   --------------------------------------------------------- */
+
+	.button--secondary {
+		background:
+			linear-gradient(
+				135deg,
+				rgba(255, 255, 255, 0.9),
+				rgba(248, 248, 248, 0.78)
+			);
+
+		color: #111111 !important;
+
+		border-color: rgba(17, 17, 17, 0.14);
+
+		box-shadow:
+			0 6px 20px rgba(0, 0, 0, 0.06);
+	}
+
+	.button--secondary:hover {
+		transform: translateY(-3px);
+
 		background: #ffffff;
-		color: #111111;
-		border-color: #d9d9d9;
+
+		color: #111111 !important;
+
+		border-color: rgba(124, 58, 237, 0.48);
+
+		box-shadow:
+			0 14px 32px rgba(0, 0, 0, 0.1),
+			0 0 26px rgba(124, 58, 237, 0.14);
 	}
 
-	.tpc-button--secondary:hover {
-		background: #f5f5f5;
-		border-color: #bdbdbd;
+	.button--secondary:active {
+		transform: translateY(-1px) scale(0.97);
 	}
 
-	.tpc-button--text {
+	/* ---------------------------------------------------------
+	   TEXT BUTTON
+	   --------------------------------------------------------- */
+
+	.button--text {
+		gap: 0.4rem;
+
+		padding: 0.45rem 0;
+
 		background: transparent;
-		color: #111111;
-		padding-left: 4px;
-		padding-right: 4px;
+		color: var(--color-text) !important;
+
+		border: 0;
+		border-radius: 0;
+
+		box-shadow: none;
 	}
 
-	.tpc-button--text:hover {
-		background: #f5f5f5;
+	.button--text::before {
+		display: none;
 	}
 
-	.tpc-button:disabled {
-		opacity: 0.55;
-		cursor: not-allowed;
-		transform: none;
+	.button--text:hover {
+		transform: translateX(5px);
+		color: #7c3aed !important;
 	}
+
+	.button--text .button__arrow {
+		font-size: 0.95rem;
+	}
+
+	/* ---------------------------------------------------------
+	   FOCUS — STRONG & ACCESSIBLE
+	   --------------------------------------------------------- */
+
+	.button:focus-visible {
+		outline: none;
+
+		box-shadow:
+			0 0 0 3px var(--color-background),
+			0 0 0 7px rgba(124, 58, 237, 0.8);
+	}
+
+	/* ---------------------------------------------------------
+	   DARK MODE
+	   --------------------------------------------------------- */
+
+	html.dark .button--primary {
+		background:
+			linear-gradient(
+				135deg,
+				#ffffff 0%,
+				#ddd6fe 48%,
+				#cffafe 100%
+	);
+	
+			color: #0b0b0f !important;
+
+		border-color: rgba(255, 255, 255, 0.28);
+
+		box-shadow:
+			0 10px 30px rgba(124, 58, 237, 0.2),
+			0 0 24px rgba(103, 232, 249, 0.06);
+	}
+
+	html.dark .button--primary::before {
+		background: linear-gradient(
+				135deg,
+			#06b6d4,
+			#22d3ee
+		);
+
+		color: #061014;
+
+	box-shadow:
+		0 10px 28px rgba(34, 211, 238, 0.25);
+}
+	}
+
+	html.dark .button--primary:hover {
+		transform: translateY(-3px);
+
+		border-color: rgba(167, 139, 250, 0.7);
+
+		box-shadow:
+			0 16px 40px rgba(124, 58, 237, 0.34),
+			0 0 34px rgba(103, 232, 249, 0.14);
+	}
+
+	html.dark .button--primary:active {
+		transform: translateY(-1px) scale(0.97);
+	}
+
+	html.dark .button--secondary {
+		background:
+			linear-gradient(
+				135deg,
+				rgba(255, 255, 255, 0.08),
+				rgba(255, 255, 255, 0.035)
+			);
+
+		color: #ffffff !important;
+
+		border-color: rgba(255, 255, 255, 0.16);
+
+		box-shadow:
+			0 8px 26px rgba(0, 0, 0, 0.18);
+	}
+
+	html.dark .button--secondary:hover {
+		transform: translateY(-3px);
+
+		background:
+			linear-gradient(
+				135deg,
+				rgba(124, 58, 237, 0.18),
+				rgba(6, 182, 212, 0.12)
+			);
+
+		color: #ffffff !important;
+
+		border-color: rgba(167, 139, 250, 0.6);
+
+		box-shadow:
+			0 14px 34px rgba(0, 0, 0, 0.28),
+			0 0 30px rgba(124, 58, 237, 0.14);
+	}
+
+	html.dark .button--secondary:active {
+		transform: translateY(-1px) scale(0.97);
+	}
+
+	html.dark .button--text {
+		color: #ffffff !important;
+	}
+
+	html.dark .button--text:hover {
+		color: #67e8f9 !important;
+	}
+
+	/* ---------------------------------------------------------
+	   REDUCED MOTION
+	   --------------------------------------------------------- */
 
 	@media (prefers-reduced-motion: reduce) {
-		.tpc-button {
+		.button,
+		.button::before,
+		.button__arrow-default,
+		.button__arrow-hover {
 			transition: none;
 		}
 
-		.tpc-button:hover {
+		.button:hover {
 			transform: none;
 		}
 	}
 </style>
-

@@ -1,4 +1,6 @@
 ---
+import Button from "./Button.astro";
+
 interface Props {
 	title: string;
 	description: string;
@@ -14,13 +16,17 @@ const {
 } = Astro.props;
 ---
 
-<a href={href} class="category-card">
+<article class="category-card">
 	<div class="category-card__content">
 		<p class="category-card__eyebrow">Explore</p>
 
-		<h3>{title}</h3>
+		<h3>
+			<a href={href}>{title}</a>
+		</h3>
 
-		<p class="category-card__description">{description}</p>
+		<p class="category-card__description">
+			{description}
+		</p>
 
 		{typeof count === "number" && (
 			<p class="category-card__count">
@@ -28,23 +34,29 @@ const {
 			</p>
 		)}
 
-		<span class="category-card__link">
-	Explore {title} <span aria-hidden="true">→</span>
-</span>
+		<div class="category-card__action">
+			<Button href={href} variant="primary" size="small">
+				Explore {title}
+			</Button>
+		</div>
 	</div>
-</a>
+</article>
 
 <style>
 	.category-card {
 		position: relative;
+
 		display: block;
+
 		height: 100%;
-		padding: 1.75rem;
+
 		background: var(--color-surface);
+
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-md);
-		text-decoration: none;
+
 		overflow: hidden;
+
 		transition:
 			transform var(--transition-normal),
 			box-shadow var(--transition-normal),
@@ -53,18 +65,27 @@ const {
 
 	.category-card::after {
 		content: "";
+
 		position: absolute;
+
 		inset: auto -30px -30px auto;
+
 		width: 110px;
 		height: 110px;
+
 		border-radius: 50%;
+
 		background: #f0eee8;
-		transition: transform 280ms ease;
+
+		transition:
+			transform 280ms ease;
 	}
 
 	.category-card:hover {
 		transform: translateY(-5px);
+
 		box-shadow: var(--shadow-md);
+
 		border-color: #d5d1c9;
 	}
 
@@ -74,61 +95,71 @@ const {
 
 	.category-card__content {
 		position: relative;
+
 		z-index: 1;
+
+		display: flex;
+		flex-direction: column;
+
+		height: 100%;
+
+		padding: 1.75rem;
 	}
 
 	.category-card__eyebrow {
 		margin: 0 0 0.6rem;
+
 		font-size: 0.75rem;
 		font-weight: 700;
+
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
+
 		color: var(--color-muted);
 	}
 
 	.category-card h3 {
 		margin: 0;
+
 		font-size: clamp(1.5rem, 3vw, 2rem);
+	}
+
+	.category-card h3 a {
+		text-decoration: none;
 	}
 
 	.category-card__description {
 		max-width: 32rem;
+
 		margin: 0.75rem 0 1rem;
+
 		color: var(--color-muted);
+
 		line-height: 1.65;
 	}
 
 	.category-card__count {
 		margin: 0;
+
 		font-size: 0.85rem;
 		font-weight: 700;
+
 		color: var(--color-text);
 	}
 
-	.category-card__link {
-	display: inline-block;
-	margin-top: 1.25rem;
-	font-size: 0.95rem;
-	font-weight: 700;
-	color: var(--color-text);
-	text-decoration: none;
-}
+	.category-card__action {
+		display: flex;
 
-.category-card__link span {
-	display: inline-block;
-	margin-left: 0.15rem;
-	transition: transform 180ms ease;
-}
+		align-items: flex-start;
 
-.category-card:hover .category-card__link span {
-	transform: translateX(5px);
-}
+		margin-top: auto;
+		padding-top: 1.25rem;
+	}
 
 	@media (prefers-reduced-motion: reduce) {
-	.category-card,
-	.category-card::after,
-	.category-card__link span {
-		transition: none;
+		.category-card,
+		.category-card::after {
+			transition: none;
+		}
 	}
-}
 </style>

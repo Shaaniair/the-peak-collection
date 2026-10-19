@@ -53,15 +53,16 @@ const classes = [
 	text-transform: uppercase;
 	color: var(--color-muted);
 }
-	.section-heading h1,
-	.section-heading h2,
-	.section-heading h3 {
-		margin: 0;
-		color: #111111;
-		font-weight: 700;
-		letter-spacing: -0.03em;
-		line-height: 1.15;
-	}
+
+.section-heading h1,
+.section-heading h2,
+.section-heading h3 {
+	margin: 0;
+	color: var(--color-text);
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	line-height: 1.15;
+}
 
 	.section-heading h1 {
 		font-size: clamp(32px, 5vw, 52px);
@@ -76,12 +77,12 @@ const classes = [
 	}
 
 	.section-heading p {
-		max-width: 680px;
-		margin: 12px 0 0;
-		color: #666666;
-		font-size: 16px;
-		line-height: 1.65;
-	}
+	max-width: 680px;
+	margin: 12px 0 0;
+	color: var(--color-muted);
+	font-size: 16px;
+	line-height: 1.65;
+}
 
 	.section-heading--center {
 		text-align: center;
@@ -102,9 +103,24 @@ const classes = [
 		}
 	}
 
-	@media (prefers-reduced-motion: reduce) {
+		@media (prefers-reduced-motion: reduce) {
 		.section-heading {
 			scroll-behavior: auto;
 		}
 	}
+
+html.dark .section-heading h1,
+html.dark .section-heading h2,
+html.dark .section-heading h3 {
+	color: #ffffff;
+}
+
+html.dark .section-heading__eyebrow {
+	color: #67e8f9;
+}
+
+html.dark .section-heading p {
+	color: #b7b7c2;
+}
+
 </style>

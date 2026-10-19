@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+---
+
+<Layout
+	title="Privacy Policy | The Peak Collection"
+	description="Read the privacy policy for The Peak Collection."
+>
+	<section class="legal-page">
+		<div class="container">
+			<Breadcrumbs
+				items={[
+					{ label: "Home", href: "/" },
+					{ label: "Privacy Policy" },
+				]}
+			/>
+
+			<header class="legal-header">
+				<p class="eyebrow">Privacy</p>
+				<h1>Privacy Policy</h1>
+				<p>
+					Information about how The Peak Collection approaches privacy
+					and website data.
+				</p>
+			</header>
+
+			<article class="legal-content">
+				<h2>Information We Collect</h2>
+				<p>
+					The information collected by this website depends on the
+					features and services that are enabled. We aim to collect only
+					information that is reasonably necessary for operating and
+					improving the website.
+				</p>
+
+				<h2>Analytics</h2>
+				<p>
+					Analytics tools may be used in the future to understand website
+					usage, performance and visitor interactions. Any such tools will
+					be configured according to their applicable privacy requirements.
+				</p>
+
+				<h2>Affiliate Links</h2>
+				<p>
+					When visitors follow affiliate links, the destination retailer
+					or affiliate network may process information according to its
+					own privacy policy.
+				</p>
+
+				<h2>Third-Party Websites</h2>
+				<p>
+					The Peak Collection may link to third-party websites. We are not
+					responsible for the privacy practices or content of external
+					websites.
+				</p>
+			</article>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.legal-page {
+		padding: 3rem 1.25rem 6rem;
+	}
+
+	.container {
+		width: min(900px, 100%);
+		margin: 0 auto;
+	}
+
+	.legal-header {
+		max-width: 760px;
+		margin: 4rem 0;
+	}
+
+	.eyebrow {
+		margin: 0 0 0.75rem;
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(2.5rem, 6vw, 4.5rem);
+		line-height: 1;
+	}
+
+	.legal-header > p {
+		margin-top: 1.25rem;
+		color: var(--color-muted);
+		font-size: 1.1rem;
+	}
+
+	.legal-content {
+		border-top: 1px solid var(--color-border);
+		padding-top: 3rem;
+	}
+
+	.legal-content h2 {
+		margin: 2.5rem 0 0.75rem;
+		font-size: 1.5rem;
+	}
+
+	.legal-content h2:first-child {
+		margin-top: 0;
+	}
+
+	.legal-content p {
+		margin: 0;
+		color: var(--color-muted);
+		line-height: 1.8;
+	}
+
+	@media (max-width: 640px) {
+		.legal-page {
+			padding: 2rem 1rem 4rem;
+		}
+
+		.legal-header {
+			margin: 3rem 0;
+		}
+	}
+</style>

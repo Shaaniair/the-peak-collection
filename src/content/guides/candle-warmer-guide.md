@@ -7,7 +7,7 @@ tags:
   - Candle Warmer
   - Home Decor
   - Gift Guide
-featuredImage: "/images/guides/candle-warmer-guide.jpg"
+featuredImage: "./candle-warmer-guide.png"
 author: "The Peak Collection"
 ---
 

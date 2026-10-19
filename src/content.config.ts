@@ -18,6 +18,7 @@ const products = defineCollection({
 			author: z.string().default("The Peak Collection"),
 			affiliate: z.boolean().default(true),
 			affiliateUrl: z.string().url().optional(),
+			featured: z.boolean().default(false),
 		}),
 });
 
@@ -26,15 +27,16 @@ const guides = defineCollection({
 		pattern: "**/*.md",
 		base: "./src/content/guides",
 	}),
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		date: z.coerce.date(),
-		category: z.string(),
-		tags: z.array(z.string()).default([]),
-		featuredImage: z.string().optional(),
-		author: z.string().default("The Peak Collection"),
-	}),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			description: z.string(),
+			date: z.coerce.date(),
+			category: z.string(),
+			tags: z.array(z.string()).default([]),
+			featuredImage: image().optional(),
+			author: z.string().default("The Peak Collection"),
+		}),
 });
 
 const categories = defineCollection({

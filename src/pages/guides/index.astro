@@ -14,6 +14,7 @@ const guides = await getCollection("guides");
 	<section class="guides-page">
 		<div class="container">
 			<SectionHeading
+				eyebrow="Practical Insights"
 				title="Guides"
 				description="Practical guides, useful ideas and insights to help you discover more."
 			/>
@@ -24,7 +25,12 @@ const guides = await getCollection("guides");
 						title={guide.data.title}
 						description={guide.data.description}
 						category={guide.data.category}
-						image={guide.data.featuredImage}
+						date={guide.data.date}
+						image={
+							guide.data.featuredImage
+								? guide.data.featuredImage
+								: undefined
+						}
 						href={`/guides/${guide.id}/`}
 					/>
 				))}
@@ -47,6 +53,7 @@ const guides = await getCollection("guides");
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 1.5rem;
+		margin-top: 2.5rem;
 	}
 
 	@media (max-width: 900px) {

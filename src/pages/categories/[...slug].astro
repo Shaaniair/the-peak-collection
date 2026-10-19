@@ -54,38 +54,39 @@ const categoryProducts = products.filter(
 
 			<div class="category-actions">
 				<Button href="/products/" variant="primary">
-					Explore Products →
+					Explore Products
 				</Button>
 
 				<Button href="/categories/" variant="secondary">
-					← All Categories
+					All Categories
 				</Button>
 			</div>
-            <section class="category-products">
-	<SectionHeading
-		eyebrow="Products in this Category"
-		title={`Explore ${category.data.title}`}
-		description={`Discover products currently listed in the ${category.data.title} category.`}
-	/>
 
-	{categoryProducts.length > 0 ? (
-		<div class="product-grid">
-			{categoryProducts.map((product) => (
-				<ProductCard
-					title={product.data.title}
-					description={product.data.description}
-					category={product.data.category}
-					image={product.data.featuredImage}
-					href={`/products/${product.id}/`}
+			<section class="category-products">
+				<SectionHeading
+					eyebrow="Products in this Category"
+					title={`Explore ${category.data.title}`}
+					description={`Discover products currently listed in the ${category.data.title} category.`}
 				/>
-			))}
-		</div>
-	) : (
-		<p class="empty-state">
-			There are no products in this category yet.
-		</p>
-	)}
-</section>
+
+				{categoryProducts.length > 0 ? (
+					<div class="product-grid">
+						{categoryProducts.map((product) => (
+							<ProductCard
+								title={product.data.title}
+								description={product.data.description}
+								category={product.data.category}
+								image={product.data.featuredImage}
+								href={`/products/${product.id}/`}
+							/>
+						))}
+					</div>
+				) : (
+					<p class="empty-state">
+						There are no products in this category yet.
+					</p>
+				)}
+			</section>
 		</div>
 	</main>
 </Layout>
@@ -137,43 +138,33 @@ const categoryProducts = products.filter(
 	}
 
 	.category-products {
-	margin-top: 5rem;
-	padding-top: 4rem;
-	border-top: 1px solid #e1dfd9;
-}
-
-.product-grid {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 1.5rem;
-}
-
-.empty-state {
-	margin: 0;
-	padding: 2rem;
-	border: 1px dashed #d5d2ca;
-	border-radius: 14px;
-	color: #666;
-	text-align: center;
-}
-
-@media (max-width: 900px) {
-	.product-grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-}
-
-@media (max-width: 640px) {
-	.category-products {
-		margin-top: 4rem;
-		padding-top: 3rem;
+		margin-top: 5rem;
+		padding-top: 4rem;
+		border-top: 1px solid #e1dfd9;
 	}
 
 	.product-grid {
-		grid-template-columns: 1fr;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.5rem;
 	}
-}
-    @media (max-width: 640px) {
+
+	.empty-state {
+		margin: 0;
+		padding: 2rem;
+		border: 1px dashed #d5d2ca;
+		border-radius: 14px;
+		color: #666;
+		text-align: center;
+	}
+
+	@media (max-width: 900px) {
+		.product-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
 		.category-detail {
 			padding: 2rem 1rem 4rem;
 		}
@@ -185,6 +176,15 @@ const categoryProducts = products.filter(
 		.category-actions {
 			flex-direction: column;
 			align-items: stretch;
+		}
+
+		.category-products {
+			margin-top: 4rem;
+			padding-top: 3rem;
+		}
+
+		.product-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

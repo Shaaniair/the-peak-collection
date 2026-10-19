@@ -12,6 +12,7 @@ featuredImage: "./cozyberry-candle-warmer.jpg"
 author: "The Peak Collection"
 affiliate: true
 affiliateUrl: "https://amzn.to/4cq6t2j"
+featured: true
 ---
 
 ## Cozyberry Dimmable Candle Warmer Lamp

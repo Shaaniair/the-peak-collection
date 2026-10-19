@@ -1,0 +1,125 @@
+<button
+	id="back-to-top"
+	class="back-to-top"
+	type="button"
+	aria-label="Back to top"
+	title="Back to top"
+>
+	<svg viewBox="0 0 24 24" aria-hidden="true">
+		<path d="m18 15-6-6-6 6"></path>
+	</svg>
+</button>
+
+<style>
+	.back-to-top {
+		position: fixed;
+		right: 22px;
+		bottom: 22px;
+		z-index: 90;
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		border: 1px solid #dedede;
+		border-radius: 14px;
+		background: rgba(255, 255, 255, 0.94);
+		color: #111111;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+		backdrop-filter: blur(12px);
+		cursor: pointer;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(12px);
+		transition:
+			opacity 180ms ease,
+			visibility 180ms ease,
+			transform 180ms ease,
+			background-color 180ms ease;
+	}
+
+	.back-to-top.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.back-to-top:hover {
+		background: #111111;
+		color: #ffffff;
+		transform: translateY(-2px);
+	}
+
+	.back-to-top svg {
+		width: 19px;
+		height: 19px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	:global(html.dark) .back-to-top {
+		border-color: #3a3a3a;
+		background: rgba(27, 27, 27, 0.94);
+		color: #ffffff;
+	}
+
+	:global(html.dark) .back-to-top:hover {
+		background: #ffffff;
+		color: #111111;
+	}
+
+	@media (max-width: 640px) {
+		.back-to-top {
+			right: 16px;
+			bottom: 16px;
+			width: 42px;
+			height: 42px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.back-to-top {
+			transition: none;
+		}
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const setup = () => {
+			const button = document.getElementById("back-to-top");
+
+			if (!button) return;
+
+			const updateVisibility = () => {
+				button.classList.toggle("is-visible", window.scrollY > 450);
+			};
+
+			const scrollToTop = () => {
+				window.scrollTo({
+					top: 0,
+					behavior: "smooth",
+				});
+			};
+
+			window.addEventListener("scroll", updateVisibility, {
+				passive: true,
+			});
+
+			button.addEventListener("click", scrollToTop);
+
+			updateVisibility();
+		};
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", setup, {
+				once: true,
+			});
+		} else {
+			setup();
+		}
+	})();
+</script>

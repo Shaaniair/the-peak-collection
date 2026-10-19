@@ -1,0 +1,171 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Button from "../components/Button.astro";
+---
+
+<Layout
+	title="About | The Peak Collection"
+	description="Learn about The Peak Collection, our curated approach to useful products, thoughtful gifts, home finds and practical discoveries."
+>
+	<section class="about-page">
+		<div class="container">
+			<Breadcrumbs
+				items={[
+					{ label: "Home", href: "/" },
+					{ label: "About" },
+				]}
+			/>
+
+			<div class="about-intro">
+				<SectionHeading
+					eyebrow="About The Peak Collection"
+					title="Curated discovery, made simpler."
+					description="The Peak Collection helps people discover useful products, thoughtful gifts, home finds and practical ideas through a clear, curated experience."
+				/>
+			</div>
+
+			<div class="about-content">
+				<section>
+					<h2>What We Do</h2>
+
+					<p>
+						The Peak Collection explores products and ideas across
+						categories that can add practical value, convenience or
+						enjoyment to everyday life.
+					</p>
+
+					<p>
+						From home and lifestyle discoveries to useful gifts and
+						practical finds, our goal is to make product discovery
+						simpler and more focused.
+					</p>
+				</section>
+
+				<section>
+					<h2>Our Approach</h2>
+
+					<p>
+						We focus on clear descriptions, useful context and
+						straightforward presentation so visitors can research
+						a discovery before deciding whether it is right for them.
+					</p>
+
+					<p>
+						Product details, pricing, availability and retailer
+						policies can change over time. Always verify current
+						information on the retailer's website before purchasing.
+					</p>
+				</section>
+
+				<section>
+					<h2>Curated With Purpose</h2>
+
+					<p>
+						The Peak Collection is designed around discovery rather
+						than simply listing products. We aim to surface ideas
+						that are useful, interesting, practical or worth a closer
+						look.
+					</p>
+
+					<p>
+						As the collection grows, our focus remains the same:
+						make it easier to discover something worth having.
+					</p>
+				</section>
+
+				<section>
+					<h2>Affiliate Transparency</h2>
+
+					<p>
+						Some product links on The Peak Collection may be
+						affiliate links. We may earn a commission when a
+						qualifying purchase is made through an affiliate link,
+						at no additional cost to the customer.
+					</p>
+
+					<p>
+						Affiliate relationships do not change the importance of
+						providing clear product information and directing visitors
+						to the retailer for current details.
+					</p>
+				</section>
+			</div>
+
+			<div class="about-action">
+				<Button href="/products/" variant="primary">
+					Explore Products
+				</Button>
+
+				<Button href="/guides/" variant="secondary">
+					Read Our Guides
+				</Button>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.about-page {
+		padding: 3rem 1.25rem 6rem;
+	}
+
+	.container {
+		width: min(1000px, 100%);
+		margin: 0 auto;
+	}
+
+	.about-intro {
+		max-width: 780px;
+		margin: 4rem auto 5rem;
+	}
+
+	.about-content {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 4rem;
+		padding-top: 4rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.about-content h2 {
+		margin: 0 0 1rem;
+		font-size: 1.7rem;
+		color: var(--color-text);
+	}
+
+	.about-content p {
+		margin: 0 0 1rem;
+		color: var(--color-muted);
+		line-height: 1.8;
+	}
+
+	.about-action {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 3rem;
+	}
+
+	@media (max-width: 700px) {
+		.about-page {
+			padding: 2rem 1rem 4rem;
+		}
+
+		.about-intro {
+			margin: 3rem auto 4rem;
+		}
+
+		.about-content {
+			grid-template-columns: 1fr;
+			gap: 2.5rem;
+			padding-top: 3rem;
+		}
+
+		.about-action {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+</style>

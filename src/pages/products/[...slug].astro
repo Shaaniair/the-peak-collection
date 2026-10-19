@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
+import Button from "../../components/Button.astro";
 
 export async function getStaticPaths() {
 	const products = await getCollection("products");
@@ -37,27 +39,30 @@ const { Content } = await render(product);
 				</header>
 
 				<div class="product-content">
+
 					{product.data.featuredImage && (
-						<img
-							src={product.data.featuredImage}
-							alt={product.data.title}
-							class="product-image"
-						/>
-					)}
+	<Image
+		src={product.data.featuredImage}
+		alt={product.data.title}
+		class="product-image"
+	/>
+)}
 
 					<div class="content">
 						<Content />
 
 						{product.data.affiliate && product.data.affiliateUrl && (
 							<div class="affiliate-cta">
-								<a
-									href={product.data.affiliateUrl}
-									target="_blank"
-									rel="nofollow sponsored noopener"
-								>
-									Check Current Product Details
-								</a>
-							</div>
+	<Button
+		href={product.data.affiliateUrl}
+		variant="primary"
+		size="large"
+		target="_blank"
+		rel="nofollow sponsored noopener"
+	>
+		Check Current Product Details
+	</Button>
+</div>
 						)}
 					</div>
 				</div>
@@ -67,6 +72,27 @@ const { Content } = await render(product);
 </Layout>
 
 <style>
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html.dark .breadcrumbs {
+	color: var(--color-muted);
+}
+
+html.dark .product-header .description {
+	color: var(--color-muted);
+}
+
+html.dark .product-content {
+	color: var(--color-text);
+}
+
+html.dark .content {
+	color: var(--color-text);
+}
+
 	.product-page {
 		padding: 3rem 1.25rem 5rem;
 	}
@@ -133,16 +159,6 @@ const { Content } = await render(product);
 
 	.affiliate-cta {
 		margin-top: 2rem;
-	}
-
-	.affiliate-cta a {
-		display: inline-block;
-		padding: 0.9rem 1.4rem;
-		border-radius: 999px;
-		text-decoration: none;
-		font-weight: 700;
-		background: #111;
-		color: white;
 	}
 
 	@media (max-width: 768px) {
