@@ -1,0 +1,138 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "../../layouts/Layout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+
+const locale = Astro.currentLocale ?? "en";
+const products = await getCollection("products");
+const digitalProducts = products.filter(
+	(product) => product.data.productType === "digital" && product.data.published,
+);
+---
+
+<Layout
+	title="Digital Products | The Peak Collection"
+	description="Explore the Digital Products hub. Listings appear only after product details, affiliate access, destination links, and usage rights are verified."
+>
+	<section class="digital-products-page">
+		<div class="container">
+			<header class="page-intro">
+				<p class="eyebrow">THE PEAK COLLECTION · DIGITAL FINDS</p>
+				<h1>Digital Products</h1>
+				<p class="page-intro__description">
+					This hub is for practical digital tools and resources. Potential areas include software, templates, ebooks, and courses; listings appear only after their details and affiliate eligibility are checked.
+				</p>
+				<p class="disclosure">
+					Some listings may use affiliate links. <a href={getRelativeLocaleUrl(locale, "affiliate-disclosure")}>Read our affiliate disclosure</a>.
+				</p>
+			</header>
+
+			{digitalProducts.length > 0 ? (
+				<section class="listing-section" aria-labelledby="digital-listings-title">
+					<h2 id="digital-listings-title">Verified digital finds</h2>
+					<div class="product-grid">
+						{digitalProducts.map((product) => (
+							<ProductCard
+								title={product.data.title}
+								description={product.data.description}
+								category={`Digital · ${product.data.category}`}
+								image={product.data.featuredImage}
+								href={getRelativeLocaleUrl(locale, `products/${product.id}`)}
+							/>
+						))}
+					</div>
+				</section>
+			) : (
+				<section class="empty-state" aria-labelledby="digital-empty-title">
+					<p class="empty-state__eyebrow">No verified listings yet</p>
+					<h2 id="digital-empty-title">Only verified listings will appear here.</h2>
+					<p>
+						There are no digital-product listings available yet. Listings appear after product information, affiliate access and destination links, and image or content usage are verified.
+					</p>
+					<nav class="recovery-links" aria-label="Explore other TPC content">
+						<a href={getRelativeLocaleUrl(locale, "discover")}>Explore Discover</a>
+						<a href={getRelativeLocaleUrl(locale, "guides")}>Read practical guides</a>
+					</nav>
+				</section>
+			)}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.digital-products-page { padding: 4.5rem 1.25rem 6rem; }
+	.container { width: min(1100px, 100%); margin-inline: auto; }
+	.page-intro { max-width: 780px; margin-inline: auto; text-align: center; }
+	.eyebrow,
+	.empty-state__eyebrow {
+		color: var(--color-accent-strong);
+		font-size: 0.76rem;
+		font-weight: 800;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+	}
+	h1 { margin: 0; font-size: clamp(2.7rem, 7vw, 5rem); }
+	.page-intro__description {
+		max-width: 680px;
+		margin: 1.25rem auto 0;
+		color: var(--color-muted);
+		font-size: clamp(1rem, 2vw, 1.15rem);
+		line-height: 1.7;
+	}
+	.disclosure { margin: 1rem 0 0; color: var(--color-muted); font-size: 0.85rem; }
+	.disclosure a { color: var(--color-accent-strong); text-underline-offset: 0.18em; }
+	.listing-section { margin-top: 4rem; }
+	.listing-section h2 { font-size: clamp(1.65rem, 3vw, 2.2rem); }
+	.product-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 360px));
+		gap: 1.5rem;
+	}
+	.empty-state {
+		max-width: 800px;
+		margin: 3.5rem auto 0;
+		padding: clamp(1.5rem, 5vw, 3rem);
+		border: 1px solid var(--color-glass-border);
+		border-radius: var(--radius-lg);
+		background: var(--color-glass-surface);
+		box-shadow: var(--shadow-card);
+		text-align: center;
+	}
+	.empty-state__eyebrow { margin: 0 0 0.65rem; }
+	.empty-state h2 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.35rem); }
+	.empty-state > p:not(.empty-state__eyebrow) {
+		max-width: 620px;
+		margin: 1rem auto 0;
+		color: var(--color-muted);
+		line-height: 1.7;
+	}
+	.recovery-links {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.75rem;
+		margin-top: 1.5rem;
+	}
+	.recovery-links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding: 0.55rem 0.9rem;
+		border: 1px solid var(--color-glass-border);
+		border-radius: 999px;
+		color: var(--color-accent-strong);
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.recovery-links a:hover { border-color: var(--color-accent-strong); background: var(--color-accent-soft); opacity: 1; }
+	.recovery-links a:focus-visible { outline: 3px solid var(--color-accent-strong); outline-offset: 3px; }
+	html.dark .eyebrow,
+	html.dark .empty-state__eyebrow { color: var(--color-accent); }
+	@media (max-width: 640px) {
+		.digital-products-page { padding: 3rem 1rem 4rem; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.recovery-links a { transition: none; }
+	}
+</style>

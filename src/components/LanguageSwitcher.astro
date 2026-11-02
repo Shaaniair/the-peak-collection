@@ -40,7 +40,7 @@ const getLanguageUrl = (code: string) => {
 
 	<select
 		id="language-select"
-		class="language-select"
+		class="header-control language-select"
 		data-language-select
 		aria-label="Choose language"
 	>
@@ -66,35 +66,18 @@ const getLanguageUrl = (code: string) => {
 
 	.language-select {
 		min-width: 104px;
-		height: 42px;
+		height: var(--button-height-small);
 		padding: 0 2.25rem 0 0.8rem;
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		background: var(--color-surface);
-		color: var(--color-text);
 		font: inherit;
 		font-size: 0.8rem;
 		font-weight: 650;
 		cursor: pointer;
-		outline: none;
 		appearance: auto;
-		transition:
-			background-color 180ms ease,
-			color 180ms ease,
-			border-color 180ms ease,
-			box-shadow 180ms ease,
-			transform 180ms ease;
 	}
 
-	.language-select:hover {
-		transform: translateY(-2px);
-		border-color: var(--color-text);
-		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-	}
-
-	.language-select:focus-visible {
-		outline: 2px solid currentColor;
-		outline-offset: 3px;
+	.language-select option {
+		background: var(--color-surface-solid);
+		color: var(--color-text-strong);
 	}
 
 	.sr-only {
@@ -112,11 +95,10 @@ const getLanguageUrl = (code: string) => {
 	@media (max-width: 560px) {
 		.language-select {
 			min-width: 82px;
-			height: 38px;
+			height: var(--button-height-small);
 			padding-left: 0.6rem;
 			padding-right: 1.7rem;
 			font-size: 0.75rem;
-			border-radius: 10px;
 		}
 	}
 </style>

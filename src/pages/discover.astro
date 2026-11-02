@@ -1,40 +1,48 @@
 ---
 import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "../layouts/Layout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ProductCard from "../components/ProductCard.astro";
 import GuideCard from "../components/GuideCard.astro";
 import Button from "../components/Button.astro";
+import { useTranslations } from "../i18n/utils";
+import type { SupportedLocale } from "../i18n/ui";
 
-const products = await getCollection("products");
+const products = await getCollection("products", ({ data }) => data.productType !== "digital");
 const guides = await getCollection("guides");
+const locale = (Astro.currentLocale ?? "en") as SupportedLocale;
+const t = useTranslations(locale);
 
 const featuredProducts = products.slice(0, 3);
 const latestGuides = guides.slice(0, 3);
 ---
 
 <Layout
-	title="Discover | The Peak Collection"
-	description="Discover useful products, thoughtful gifts, practical ideas and buying inspiration from The Peak Collection."
+	title={`${t('nav.discover')} | The Peak Collection`}
+	description={t('discover.hero.description')}
 >
 	<section class="discover-hero">
 		<div class="container hero-inner">
-			<span class="eyebrow">DISCOVER</span>
+			<span class="eyebrow">{t('nav.discover')}</span>
 
-			<h1>Find something worth having.</h1>
+			<h1>{t('discover.hero.title')}</h1>
 
 			<p>
-				Explore useful products, thoughtful finds and practical ideas
-				curated by The Peak Collection.
+				{t('discover.hero.description')}
 			</p>
 
-			<div class="hero-actions">
-				<Button href="/products" variant="primary" size="large">
-					Explore Products
+						<div class="hero-actions">
+				<Button href={getRelativeLocaleUrl(locale, "products")} variant="primary" size="large">
+					{t('action.exploreProducts')}
 				</Button>
 
-				<Button href="/guides" variant="secondary" size="large">
-					Read Guides
+				<Button href={getRelativeLocaleUrl(locale, "guides")} variant="secondary" size="large">
+					{t('action.exploreAllGuides')}
+				</Button>
+
+				<Button href={getRelativeLocaleUrl(locale, "digital-products")} variant="accent" size="large">
+					{t('action.exploreDigital')}
 				</Button>
 			</div>
 		</div>
@@ -43,9 +51,9 @@ const latestGuides = guides.slice(0, 3);
 	<section class="section">
 		<div class="container">
 			<SectionHeading
-				eyebrow="PRODUCTS"
-				title="Featured Finds"
-				description="Explore products currently featured by The Peak Collection."
+				eyebrow={t('nav.products')}
+				title={t('discover.products.title')}
+				description={t('discover.products.description')}
 			/>
 
 			<div class="product-grid">
@@ -55,14 +63,14 @@ const latestGuides = guides.slice(0, 3);
 						description={product.data.description}
 						category={product.data.category}
 						image={product.data.featuredImage}
-						href={`/products/${product.id}/`}
+						href={getRelativeLocaleUrl(locale, `products/${product.id}`)}
 					/>
 				))}
 			</div>
 
 			<div class="section-action">
-				<Button href="/products" variant="text">
-					View all products →
+				<Button href={getRelativeLocaleUrl(locale, "products")} variant="text">
+					{t('action.viewAll')}
 				</Button>
 			</div>
 		</div>
@@ -71,9 +79,9 @@ const latestGuides = guides.slice(0, 3);
 	<section class="section section-muted">
 		<div class="container">
 			<SectionHeading
-				eyebrow="GUIDES"
-				title="Useful Ideas"
-				description="Practical content to help you explore products and make more informed discoveries."
+				eyebrow={t('nav.guides')}
+				title={t('discover.guides.title')}
+				description={t('discover.guides.description')}
 			/>
 
 			<div class="guide-grid">
@@ -82,14 +90,14 @@ const latestGuides = guides.slice(0, 3);
 						title={guide.data.title}
 						description={guide.data.description}
 						category={guide.data.category}
-						href={`/guides/${guide.id}/`}
+						href={getRelativeLocaleUrl(locale, `guides/${guide.id}`)}
 					/>
 				))}
 			</div>
 
 			<div class="section-action">
-				<Button href="/guides" variant="text">
-					Explore all guides →
+				<Button href={getRelativeLocaleUrl(locale, "guides")} variant="text">
+					{t('action.exploreAllGuides')}
 				</Button>
 			</div>
 		</div>
@@ -99,15 +107,14 @@ const latestGuides = guides.slice(0, 3);
 		<div class="container final-cta">
 			<span class="eyebrow">THE PEAK COLLECTION</span>
 
-			<h2>Discover your next worthwhile find.</h2>
+			<h2>{t('discover.cta.title')}</h2>
 
 			<p>
-				Keep exploring products, guides and ideas selected to make
-				discovery simpler.
+				{t('discover.cta.description')}
 			</p>
 
-			<Button href="/products" variant="primary" size="large">
-				Start Exploring
+			<Button href={getRelativeLocaleUrl(locale, "products")} variant="primary" size="large">
+				{t('discover.cta.button')}
 			</Button>
 		</div>
 	</section>
@@ -115,10 +122,10 @@ const latestGuides = guides.slice(0, 3);
 
 <style>
 	.discover-hero {
-		padding: 7rem 1.25rem 6rem;
+		padding: 5rem 1.25rem 4.5rem;
 		background:
-			radial-gradient(circle at top right, rgba(17, 17, 17, 0.08), transparent 35%),
-			#f7f7f5;
+			radial-gradient(circle at top right, var(--color-accent-soft), transparent 38%),
+			var(--color-surface-muted);
 	}
 
 	.container {
@@ -139,7 +146,7 @@ const latestGuides = guides.slice(0, 3);
 		font-weight: 700;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: #666;
+		color: var(--color-accent-strong);
 	}
 
 	h1 {
@@ -153,15 +160,20 @@ const latestGuides = guides.slice(0, 3);
 		max-width: 620px;
 		margin: 1.5rem auto 0;
 		font-size: clamp(1rem, 2vw, 1.2rem);
-		color: #555;
+		color: var(--color-muted);
 	}
 
 	.hero-actions {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 0.8rem;
+		width: 100%;
 		margin-top: 2rem;
+	}
+
+	.hero-actions > .button {
+		width: 100%;
+		min-width: 0;
 	}
 
 	.section {
@@ -169,7 +181,7 @@ const latestGuides = guides.slice(0, 3);
 	}
 
 	.section-muted {
-		background: #f7f7f5;
+		background: var(--color-surface-muted);
 	}
 
 	.product-grid,
@@ -201,13 +213,25 @@ const latestGuides = guides.slice(0, 3);
 	.final-cta p {
 		max-width: 580px;
 		margin: 1.25rem auto 2rem;
-		color: #555;
+		color: var(--color-muted);
 	}
+
+	html.dark .discover-hero h1 { color: var(--color-text-strong); }
+	html.dark .discover-hero .eyebrow { color: var(--color-secondary); }
+	html.dark .hero-inner p,
+	html.dark .final-cta p { color: var(--color-muted); }
 
 	@media (max-width: 900px) {
 		.product-grid,
 		.guide-grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 840px) {
+		.hero-actions {
+			grid-template-columns: minmax(0, 360px);
+			justify-content: center;
 		}
 	}
 
@@ -225,9 +249,5 @@ const latestGuides = guides.slice(0, 3);
 			grid-template-columns: 1fr;
 		}
 
-		.hero-actions {
-			flex-direction: column;
-			align-items: stretch;
-		}
 	}
 </style>

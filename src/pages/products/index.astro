@@ -1,10 +1,12 @@
 ---
 import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "../../layouts/Layout.astro";
 import SectionHeading from "../../components/SectionHeading.astro";
 import ProductCard from "../../components/ProductCard.astro";
 
-const products = await getCollection("products");
+const products = await getCollection("products", ({ data }) => data.productType !== "digital");
+const locale = Astro.currentLocale ?? "en";
 
 const sortedProducts = [...products].sort((a, b) => {
 	const dateA = a.data.date?.getTime() ?? 0;
@@ -26,11 +28,12 @@ const regularProducts = sortedProducts.filter(
 	title="Products | The Peak Collection"
 	description="Explore useful products, thoughtful gifts, home finds and practical discoveries from The Peak Collection."
 >
-	<main class="products-page">
+	<div class="products-page">
 		<div class="container">
 
 			<header class="products-header">
 				<SectionHeading
+					level="h1"
 					eyebrow="Discover Something Worth Having"
 					title="Explore Products"
 					description="Browse our growing collection of useful products, thoughtful gifts, home finds and practical discoveries."
@@ -70,7 +73,7 @@ const regularProducts = sortedProducts.filter(
 										description={product.data.description}
 										category={product.data.category}
 										image={product.data.featuredImage}
-										href={`/products/${product.id}/`}
+										href={getRelativeLocaleUrl(locale, `products/${product.id}`)}
 										featured={true}
 									/>
 								))}
@@ -106,7 +109,7 @@ const regularProducts = sortedProducts.filter(
 					description={product.data.description}
 					category={product.data.category}
 					image={product.data.featuredImage}
-					href={`/products/${product.id}/`}
+					href={getRelativeLocaleUrl(locale, `products/${product.id}`)}
 				/>
 			))}
 		</div>
@@ -139,7 +142,7 @@ const regularProducts = sortedProducts.filter(
 			)}
 
 		</div>
-	</main>
+	</div>
 </Layout>
 
 <style>

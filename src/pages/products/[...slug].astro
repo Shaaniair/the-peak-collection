@@ -1,11 +1,13 @@
 ---
 import { getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import Button from "../../components/Button.astro";
+import GuideCard from "../../components/GuideCard.astro";
 
 export async function getStaticPaths() {
-	const products = await getCollection("products");
+	const products = await getCollection("products", ({ data }) => data.productType !== "digital" || data.published);
 
 	return products.map((product) => ({
 		params: { slug: product.id },
@@ -15,25 +17,51 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 const { Content } = await render(product);
+const locale = Astro.currentLocale ?? "en";
+const isDigitalProduct = product.data.productType === "digital";
+const normalize = (value: string) => value.trim().toLocaleLowerCase("en-US");
+const [categories, guides] = await Promise.all([
+	getCollection("categories"),
+	getCollection("guides"),
+]);
+const productCategory = categories.find(
+	(category) => normalize(category.data.title) === normalize(product.data.category),
+);
+const relatedGuides = guides
+	.filter((guide) =>
+		guide.data.tags.some((tag) =>
+			product.data.tags.some((productTag) => normalize(productTag) === normalize(tag)),
+		),
+	)
+	.slice(0, 3);
 ---
 
 <Layout
-	title={`${product.data.title} | The Peak Collection`}
+	title={`${product.data.title} | ${isDigitalProduct ? "Digital Products" : "The Peak Collection"}`}
 	description={product.data.description}
 >
-	<main class="product-page">
+	<div class="product-page">
 		<div class="container">
 			<nav class="breadcrumbs">
-				<a href="/">Home</a>
+				<a href={getRelativeLocaleUrl(locale)}>Home</a>
 				<span>/</span>
-				<a href="/products">Products</a>
+				<a href={getRelativeLocaleUrl(locale, isDigitalProduct ? "digital-products" : "products")}>
+					{isDigitalProduct ? "Digital Products" : "Products"}
+				</a>
 				<span>/</span>
 				<span>{product.data.title}</span>
 			</nav>
 
 			<article>
 				<header class="product-header">
-					<p class="eyebrow">{product.data.category}</p>
+					<p class="eyebrow">
+						{isDigitalProduct && <span>Digital Product · </span>}
+						{productCategory ? (
+							<a href={getRelativeLocaleUrl(locale, `categories/${productCategory.id}`)}>
+								{product.data.category}
+							</a>
+						) : product.data.category}
+					</p>
 					<h1>{product.data.title}</h1>
 					<p class="description">{product.data.description}</p>
 				</header>
@@ -53,45 +81,49 @@ const { Content } = await render(product);
 
 						{product.data.affiliate && product.data.affiliateUrl && (
 							<div class="affiliate-cta">
-	<Button
-		href={product.data.affiliateUrl}
-		variant="primary"
-		size="large"
-		target="_blank"
-		rel="nofollow sponsored noopener"
-	>
-		Check Current Product Details
-	</Button>
-</div>
+								<Button
+									href={product.data.affiliateUrl}
+									variant="primary"
+									size="large"
+									target="_blank"
+									rel="nofollow sponsored noopener"
+								>
+									Check Current Product Details
+								</Button>
+								<p class="affiliate-disclosure">
+									This page may contain affiliate links. {" "}
+									<a href={getRelativeLocaleUrl(locale, "affiliate-disclosure")}>
+										Learn about our affiliate disclosure.
+									</a>
+								</p>
+							</div>
 						)}
 					</div>
 				</div>
 			</article>
+
+			{relatedGuides.length > 0 && (
+				<section class="related-guides" aria-labelledby="related-guides-title">
+					<h2 id="related-guides-title">Related guide{relatedGuides.length === 1 ? "" : "s"}</h2>
+					<div class="related-guides__grid">
+						{relatedGuides.map((guide) => (
+							<GuideCard
+								title={guide.data.title}
+								description={guide.data.description}
+								category={guide.data.category}
+								date={guide.data.date}
+								image={guide.data.featuredImage}
+								href={getRelativeLocaleUrl(locale, `guides/${guide.id}`)}
+							/>
+						))}
+					</div>
+				</section>
+			)}
 		</div>
-	</main>
+	</div>
 </Layout>
 
 <style>
-
-/* =========================================================
-   DARK MODE
-========================================================= */
-
-html.dark .breadcrumbs {
-	color: var(--color-muted);
-}
-
-html.dark .product-header .description {
-	color: var(--color-muted);
-}
-
-html.dark .product-content {
-	color: var(--color-text);
-}
-
-html.dark .content {
-	color: var(--color-text);
-}
 
 	.product-page {
 		padding: 3rem 1.25rem 5rem;
@@ -108,7 +140,7 @@ html.dark .content {
 		gap: 0.5rem;
 		margin-bottom: 2rem;
 		font-size: 0.9rem;
-		color: #666;
+		color: var(--color-muted);
 	}
 
 	.breadcrumbs a {
@@ -136,7 +168,7 @@ html.dark .content {
 	.description {
 		font-size: 1.15rem;
 		line-height: 1.7;
-		color: #555;
+		color: var(--color-muted);
 	}
 
 	.product-content {
@@ -159,6 +191,35 @@ html.dark .content {
 
 	.affiliate-cta {
 		margin-top: 2rem;
+	}
+
+	.affiliate-disclosure {
+		margin: 0.8rem 0 0;
+		color: var(--color-muted);
+		font-size: 0.82rem;
+		line-height: 1.5;
+	}
+
+	.affiliate-disclosure a,
+	.eyebrow a {
+		color: var(--color-accent-strong);
+		text-underline-offset: 0.18em;
+	}
+
+	.related-guides {
+		margin-top: 4rem;
+		padding-top: 2.5rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.related-guides h2 {
+		margin-bottom: 1.5rem;
+		font-size: clamp(1.6rem, 3vw, 2.25rem);
+	}
+
+	.related-guides__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 380px);
 	}
 
 	@media (max-width: 768px) {

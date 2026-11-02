@@ -1,11 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/Button.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const locale = Astro.currentLocale ?? "en";
 ---
 
 <Layout
 	title="Page Not Found | The Peak Collection"
 	description="The page you're looking for could not be found."
+	noindex={true}
 >
 	<section class="not-found">
 		<div class="container">
@@ -19,11 +23,11 @@ import Button from "../components/Button.astro";
 			</p>
 
 			<div class="actions">
-				<Button href="/" variant="primary" size="large">
+				<Button href={getRelativeLocaleUrl(locale)} variant="primary" size="large">
 					Back to Home
 				</Button>
 
-				<Button href="/products/" variant="secondary" size="large">
+				<Button href={getRelativeLocaleUrl(locale, "products")} variant="secondary" size="large">
 					Explore Products
 				</Button>
 			</div>

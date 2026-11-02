@@ -13,41 +13,66 @@
 <style>
 	.back-to-top {
 		position: fixed;
-		right: 22px;
-		bottom: 22px;
-		z-index: 90;
+		right: max(16px, calc(env(safe-area-inset-right) + 8px));
+		bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+		z-index: 110;
 		display: grid;
 		place-items: center;
-		width: 44px;
-		height: 44px;
+		width: 48px;
+		height: 48px;
+		min-width: 44px;
+		min-height: 44px;
 		padding: 0;
-		border: 1px solid #dedede;
-		border-radius: 14px;
-		background: rgba(255, 255, 255, 0.94);
-		color: #111111;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-		backdrop-filter: blur(12px);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background: var(--color-surface-solid);
+		color: var(--color-text-strong);
+		box-shadow: var(--shadow-md);
 		cursor: pointer;
 		opacity: 0;
 		visibility: hidden;
+		pointer-events: none;
 		transform: translateY(12px);
 		transition:
-			opacity 180ms ease,
-			visibility 180ms ease,
-			transform 180ms ease,
-			background-color 180ms ease;
+			opacity var(--transition-fast),
+			visibility var(--transition-fast),
+			transform var(--transition-fast),
+			background-color var(--transition-fast),
+			border-color var(--transition-fast),
+			color var(--transition-fast),
+			box-shadow var(--transition-emphasis);
 	}
 
 	.back-to-top.is-visible {
 		opacity: 1;
 		visibility: visible;
+		pointer-events: auto;
 		transform: translateY(0);
 	}
 
 	.back-to-top:hover {
-		background: #111111;
-		color: #ffffff;
+		background: var(--color-action-hover);
+		border-color: var(--color-accent-hover);
+		color: #08232b;
+		box-shadow: var(--shadow-button-hover);
 		transform: translateY(-2px);
+	}
+
+	@supports (backdrop-filter: blur(1px)) {
+		.back-to-top {
+			background: var(--color-glass-surface);
+			border-color: var(--color-glass-border);
+			backdrop-filter: blur(12px) saturate(135%);
+			-webkit-backdrop-filter: blur(12px) saturate(135%);
+			box-shadow: var(--shadow-md), inset 0 1px 0 var(--color-glass-highlight);
+		}
+	}
+
+	.back-to-top:active { transform: translateY(0) scale(0.96); }
+
+	.back-to-top:focus-visible {
+		outline: 3px solid var(--color-accent-strong);
+		outline-offset: 4px;
 	}
 
 	.back-to-top svg {
@@ -58,26 +83,6 @@
 		stroke-width: 2;
 		stroke-linecap: round;
 		stroke-linejoin: round;
-	}
-
-	:global(html.dark) .back-to-top {
-		border-color: #3a3a3a;
-		background: rgba(27, 27, 27, 0.94);
-		color: #ffffff;
-	}
-
-	:global(html.dark) .back-to-top:hover {
-		background: #ffffff;
-		color: #111111;
-	}
-
-	@media (max-width: 640px) {
-		.back-to-top {
-			right: 16px;
-			bottom: 16px;
-			width: 42px;
-			height: 42px;
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -92,22 +97,53 @@
 		const setup = () => {
 			const button = document.getElementById("back-to-top");
 
-			if (!button) return;
+			if (!button || button.dataset.initialized === "true") return;
+			button.dataset.initialized = "true";
+
+			let updateFrame = 0;
+			const getScrollTop = () =>
+				Math.max(
+					window.scrollY || 0,
+					document.scrollingElement?.scrollTop || 0,
+				);
 
 			const updateVisibility = () => {
-				button.classList.toggle("is-visible", window.scrollY > 450);
+				if (updateFrame) return;
+
+				updateFrame = window.requestAnimationFrame(() => {
+					updateFrame = 0;
+					const threshold = Math.min(320, Math.max(160, window.innerHeight * 0.35));
+					const isVisible = getScrollTop() > threshold;
+
+					button.classList.toggle("is-visible", isVisible);
+					if (!isVisible && document.activeElement === button) button.blur();
+				});
 			};
 
 			const scrollToTop = () => {
+				const reducedMotion = window.matchMedia(
+					"(prefers-reduced-motion: reduce)",
+				).matches;
+
 				window.scrollTo({
 					top: 0,
-					behavior: "smooth",
+					behavior: reducedMotion ? "auto" : "smooth",
 				});
 			};
 
 			window.addEventListener("scroll", updateVisibility, {
 				passive: true,
 			});
+			document.addEventListener("scroll", updateVisibility, {
+				capture: true,
+				passive: true,
+			});
+			window.addEventListener("resize", updateVisibility, { passive: true });
+			window.addEventListener("orientationchange", updateVisibility, {
+				passive: true,
+			});
+			window.addEventListener("pageshow", updateVisibility);
+			document.addEventListener("astro:page-load", updateVisibility);
 
 			button.addEventListener("click", scrollToTop);
 

@@ -1,4 +1,6 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
 interface Crumb {
 	label: string;
 	href?: string;
@@ -9,6 +11,13 @@ interface Props {
 }
 
 const { items } = Astro.props;
+const locale = Astro.currentLocale ?? "en";
+const localePrefix = /^\/(tr|ar|ur|es|fr|de|it|pt|id|ja|ko|zh)(?=\/|$)/;
+const localizeHref = (href: string) => {
+	if (!href.startsWith("/") || localePrefix.test(href)) return href;
+	const path = href.replace(/^\/+|\/+$/g, "");
+	return getRelativeLocaleUrl(locale, path);
+};
 ---
 
 <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -16,7 +25,7 @@ const { items } = Astro.props;
 		{items.map((item, index) => (
 			<li>
 				{item.href && index < items.length - 1 ? (
-					<a href={item.href}>{item.label}</a>
+					<a href={localizeHref(item.href)}>{item.label}</a>
 				) : (
 					<span aria-current={index === items.length - 1 ? "page" : undefined}>
 						{item.label}

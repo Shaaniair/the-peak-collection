@@ -3,6 +3,9 @@ import Layout from "../layouts/Layout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import Button from "../components/Button.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const locale = Astro.currentLocale ?? "en";
 ---
 
 <Layout
@@ -13,13 +16,14 @@ import Button from "../components/Button.astro";
 		<div class="container">
 			<Breadcrumbs
 				items={[
-					{ label: "Home", href: "/" },
+					{ label: "Home", href: getRelativeLocaleUrl(locale) },
 					{ label: "About" },
 				]}
 			/>
 
 			<div class="about-intro">
 				<SectionHeading
+					level="h1"
 					eyebrow="About The Peak Collection"
 					title="Curated discovery, made simpler."
 					description="The Peak Collection helps people discover useful products, thoughtful gifts, home finds and practical ideas through a clear, curated experience."
@@ -94,11 +98,11 @@ import Button from "../components/Button.astro";
 			</div>
 
 			<div class="about-action">
-				<Button href="/products/" variant="primary">
+				<Button href={getRelativeLocaleUrl(locale, "products")} variant="primary">
 					Explore Products
 				</Button>
 
-				<Button href="/guides/" variant="secondary">
+				<Button href={getRelativeLocaleUrl(locale, "guides")} variant="secondary">
 					Read Our Guides
 				</Button>
 			</div>

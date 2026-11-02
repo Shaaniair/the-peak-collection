@@ -13,12 +13,23 @@ const products = defineCollection({
 			description: z.string(),
 			date: z.coerce.date().optional(),
 			category: z.string(),
+			productType: z.enum(["physical", "digital"]).default("physical"),
 			tags: z.array(z.string()).default([]),
 			featuredImage: image().optional(),
 			author: z.string().default("The Peak Collection"),
 			affiliate: z.boolean().default(true),
 			affiliateUrl: z.string().url().optional(),
 			featured: z.boolean().default(false),
+			// Digital entries remain hidden unless explicitly published after review.
+			published: z.boolean().optional(),
+		}).superRefine((data, context) => {
+			if (data.productType === "digital" && data.published && (!data.affiliate || !data.affiliateUrl?.startsWith("https://"))) {
+				context.addIssue({
+					code: "custom",
+					path: ["affiliateUrl"],
+					message: "Published digital products require an approved affiliate relationship and an HTTPS destination.",
+				});
+			}
 		}),
 });
 

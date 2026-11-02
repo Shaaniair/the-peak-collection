@@ -1,22 +1,32 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations } from "../i18n/utils";
+import type { SupportedLocale } from "../i18n/ui";
+
+const locale = (Astro.currentLocale ?? "en") as SupportedLocale;
+const t = useTranslations(locale);
+---
+
 <footer class="site-footer">
 	<div class="footer-inner">
 		<div class="footer-main">
 			<div class="footer-brand">
 				<strong>The Peak Collection</strong>
-				<p>Discover something worth having.</p>
+				<p>{t('footer.tagline')}</p>
 			</div>
 
 			<nav class="footer-links" aria-label="Footer navigation">
-				<a href="/affiliate-disclosure">Affiliate Disclosure</a>
-				<a href="/privacy">Privacy Policy</a>
-				<a href="/terms">Terms</a>
-				<a href="/contact">Contact</a>
+				<a href={getRelativeLocaleUrl(locale, "digital-products")}>{t('nav.digitalProducts')}</a>
+				<a href={getRelativeLocaleUrl(locale, "affiliate-disclosure")}>{t('footer.disclosure')}</a>
+				<a href={getRelativeLocaleUrl(locale, "privacy")}>{t('footer.privacy')}</a>
+				<a href={getRelativeLocaleUrl(locale, "terms")}>{t('footer.terms')}</a>
+				<a href={getRelativeLocaleUrl(locale, "contact")}>{t('footer.contact')}</a>
 			</nav>
 		</div>
 
 		<div class="footer-bottom">
 			<p>
-				© {new Date().getFullYear()} The Peak Collection. All rights reserved.
+				© {new Date().getFullYear()} The Peak Collection. {t('footer.rights')}
 			</p>
 		</div>
 	</div>
@@ -26,24 +36,11 @@
 	.site-footer {
 		margin-top: 5rem;
 		padding: 4rem 1.25rem 1.5rem;
-		background: var(--color-text);
+		background: var(--color-footer-background);
 		color: white;
 	}
 
-	html.dark .site-footer {
-	background:
-		linear-gradient(
-			135deg,
-			#09090b 0%,
-			#111116 55%,
-			#0f172a 100%
-		);
-	border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-html.dark .footer-links a:hover {
-	color: #c4b5fd;
-}
+	.site-footer { border-top: 1px solid var(--color-border); }
 
 	.footer-inner {
 		width: min(100%, var(--container));
@@ -76,15 +73,23 @@ html.dark .footer-links a:hover {
 		gap: 1rem 1.5rem;
 	}
 
-	.footer-links a {
-		color: rgba(255, 255, 255, 0.82);
+		.footer-links a {
+		color: rgba(255, 255, 255, 0.72);
 		text-decoration: none;
-		font-size: 0.9rem;
+		font-size: 0.88rem;
+		font-weight: 600;
+		transition: color var(--transition-fast), transform var(--transition-fast);
 	}
 
 	.footer-links a:hover {
-		color: white;
-		opacity: 1;
+		color: var(--color-accent);
+		transform: translateY(-1px);
+	}
+
+	.footer-links a:focus-visible {
+		outline: 3px solid var(--color-accent);
+		outline-offset: 4px;
+		border-radius: 4px;
 	}
 
 	.footer-bottom {

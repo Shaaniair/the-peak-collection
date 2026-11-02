@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import Button from "./Button.astro";
+import { useTranslations } from "../i18n/utils";
+import type { SupportedLocale } from "../i18n/ui";
 
 interface Props {
 	title: string;
@@ -21,8 +23,11 @@ const {
 	image,
 } = Astro.props;
 
+const locale = (Astro.currentLocale ?? "en") as SupportedLocale;
+const t = useTranslations(locale);
+
 const formattedDate = date
-	? new Intl.DateTimeFormat("en-US", {
+	? new Intl.DateTimeFormat(locale === "en" ? "en-US" : locale, {
 			month: "long",
 			day: "numeric",
 			year: "numeric",
@@ -35,7 +40,7 @@ const formattedDate = date
 		<a
 			href={href}
 			class="guide-card__image-link"
-			aria-label={`Read ${title}`}
+			aria-label={`${t('action.readGuide')}: ${title}`}
 		>
 			<Image
 				src={image}
@@ -65,7 +70,7 @@ const formattedDate = date
 
 		<div class="guide-card__action">
 			<Button href={href} variant="primary" size="small">
-				Read Guide
+				{t('action.readGuide')}
 			</Button>
 		</div>
 	</div>
@@ -82,6 +87,7 @@ const formattedDate = date
 
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-card);
 
 		overflow: hidden;
 
@@ -92,11 +98,9 @@ const formattedDate = date
 	}
 
 	.guide-card:hover {
-		transform: translateY(-5px);
-
-		box-shadow: var(--shadow-md);
-
-		border-color: #d5d1c9;
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-card-hover);
+		border-color: var(--color-accent-strong);
 	}
 
 	.guide-card__image-link {
@@ -104,7 +108,7 @@ const formattedDate = date
 
 		overflow: hidden;
 
-		background: #f3f1ec;
+		background: var(--color-surface-muted);
 	}
 
 	.guide-card__image {

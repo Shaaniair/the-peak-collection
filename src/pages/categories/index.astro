@@ -1,10 +1,12 @@
 ---
 import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "../../layouts/Layout.astro";
 import SectionHeading from "../../components/SectionHeading.astro";
 import CategoryCard from "../../components/CategoryCard.astro";
 
 const categories = await getCollection("categories");
+const locale = Astro.currentLocale ?? "en";
 ---
 
 <Layout
@@ -14,20 +16,25 @@ const categories = await getCollection("categories");
 	<section class="categories-page">
 		<div class="container">
 			<SectionHeading
+				level="h1"
 				eyebrow="Browse by Category"
 				title="Categories"
 				description="Explore our collections by category and discover products and ideas that match your interests."
 			/>
 
-			<div class="category-grid">
-				{categories.map((category) => (
-					<CategoryCard
-						title={category.data.title}
-						description={category.data.description}
-						href={`/categories/${category.id}/`}
-					/>
-				))}
-			</div>
+			{categories.length > 0 ? (
+				<div class="category-grid">
+					{categories.map((category) => (
+						<CategoryCard
+							title={category.data.title}
+							description={category.data.description}
+							href={getRelativeLocaleUrl(locale, `categories/${category.id}`)}
+						/>
+					))}
+				</div>
+			) : (
+				<p class="empty-state" role="status">No categories are available yet. Please check back soon.</p>
+			)}
 		</div>
 	</section>
 </Layout>
@@ -47,6 +54,15 @@ const categories = await getCollection("categories");
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 1.5rem;
 		margin-top: 2.5rem;
+	}
+
+	.empty-state {
+		margin: 1rem 0;
+		padding: 1.5rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		background: var(--color-surface-muted);
+		color: var(--color-muted);
 	}
 
 	@media (max-width: 900px) {
